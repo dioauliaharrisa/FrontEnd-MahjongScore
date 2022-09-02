@@ -35,6 +35,7 @@ export default function HomeView() {
       setTotalScore(newTotalScore);
       return previousScore;
     });
+    console.log(value);
   };
 
   return (
