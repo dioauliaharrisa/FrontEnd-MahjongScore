@@ -22,7 +22,8 @@ export default function HomeView() {
       // console.log(previousScore[+index]);
       // console.log(previousScore[+index][placeholder]);
 
-      if (placeholder === "score") previousScore[index][placeholder] = +value;
+      if (placeholder === "score")
+        previousScore[index][placeholder] = +value * 100;
       if (placeholder === "name") previousScore[index][placeholder] = value;
 
       // console.log(previousScore);
