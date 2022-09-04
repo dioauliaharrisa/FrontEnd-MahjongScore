@@ -24,7 +24,7 @@ export default function TableView() {
 
       setFetchedData(data);
     };
-    handleFetchAllData();
+    handleFetchAllData().catch(console.error);
   }, []);
 
   useEffect(() => {
@@ -75,20 +75,20 @@ export default function TableView() {
                     {fetchedDatum.province}/{fetchedDatum.club}
                   </td>
                   <td class="py-4 px-6">
-                    {fetchedDatum.Score[0].east?.name}/
-                    {fetchedDatum.Score[0].east?.score}
+                    {fetchedDatum.Score[0]?.east?.name}/
+                    {fetchedDatum.Score[0]?.east?.score}
                   </td>
                   <td class="py-4 px-6">
-                    {fetchedDatum.Score[0].south?.name}/
-                    {fetchedDatum.Score[0].south?.score}
+                    {fetchedDatum.Score[0]?.south?.name}/
+                    {fetchedDatum.Score[0]?.south?.score}
                   </td>
                   <td class="py-4 px-6">
-                    {fetchedDatum.Score[0].west?.name}/
-                    {fetchedDatum.Score[0].west?.score}
+                    {fetchedDatum.Score[0]?.west?.name}/
+                    {fetchedDatum.Score[0]?.west?.score}
                   </td>
                   <td class="py-4 px-6">
-                    {fetchedDatum.Score[0].north?.name}/
-                    {fetchedDatum.Score[0].north?.score}
+                    {fetchedDatum.Score[0]?.north?.name}/
+                    {fetchedDatum.Score[0]?.north?.score}
                   </td>
                 </tr>
               );
