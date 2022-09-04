@@ -2,6 +2,13 @@ import React, { useState } from "react";
 import LongInputBar from "../components/LongInputBar";
 import BasicButton from "../components/BasicButton";
 import { Link } from "react-router-dom";
+
+import { createClient } from "@supabase/supabase-js";
+
+const supabaseUrl = process.env.REACT_APP_SUPABASE_URL;
+const supabaseKey = process.env.REACT_APP_SUPABASE_KEY;
+const supabase = createClient(supabaseUrl, supabaseKey);
+
 export default function HomeView() {
   // eslint-disable-next-line
   const [score, setScore] = useState([
@@ -10,6 +17,7 @@ export default function HomeView() {
     { name: "", score: 0 },
     { name: "", score: 0 },
   ]);
+
   const [totalScore, setTotalScore] = useState(0);
 
   const handleOnChange = (event, index) => {
@@ -22,8 +30,7 @@ export default function HomeView() {
       // console.log(previousScore[+index]);
       // console.log(previousScore[+index][placeholder]);
 
-      if (placeholder === "score")
-        previousScore[index][placeholder] = +value
+      if (placeholder === "score") previousScore[index][placeholder] = +value;
       if (placeholder === "name") previousScore[index][placeholder] = value;
 
       // console.log(previousScore);
@@ -37,6 +44,27 @@ export default function HomeView() {
       return previousScore;
     });
     console.log(value);
+  };
+
+  const submitGameDetails = async () => {
+    await supabase.from("Game_details").insert([
+      {
+        province: "DKI Jakarta",
+        club: "Asosiasi Riichi Mahjong Jakarta Raya",
+      },
+    ]);
+  };
+  const submitScore = async () => {
+    await supabase
+      .from("Score")
+      .insert([
+        { east: score[0], south: score[1], west: score[2], north: score[3] },
+      ]);
+  };
+
+  const handleSubmit = async () => {
+    submitGameDetails();
+    submitScore();
   };
 
   return (
@@ -108,7 +136,10 @@ export default function HomeView() {
               Total: {totalScore}
             </div>
             <Link to={"/table"}>
-              <BasicButton prop_buttonName={"Submit"} />
+              <BasicButton
+                prop_onClick={handleSubmit}
+                prop_buttonName={"Submit"}
+              />
             </Link>
           </div>
         </div>
