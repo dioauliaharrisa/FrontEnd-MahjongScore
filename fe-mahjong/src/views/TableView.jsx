@@ -13,10 +13,10 @@ export default function TableView() {
 
   useEffect(() => {
     const handleFetchAllData = async () => {
-      let { data, error } = await supabase.from("Game_details").select(`
+      let { data, error } = await supabase.from("Game_Details").select(`
         "*",
         Score (
-          id, east, south, west, north
+          ID, east, south, west, north, Game_Details_ID
         )
       `);
       console.log(data);
@@ -33,7 +33,7 @@ export default function TableView() {
 
   return (
     <div className="h-screen bg-[#3d476a] ">
-      <TopNavigationBar prop_toLeft={"/"} prop_toRight/>
+      <TopNavigationBar prop_toLeft={"/"} prop_toRight />
       <div class="overflow-x-auto relative ">
         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
           <thead class="text-xs text-gray-200 uppercase bg-[#3d476a]">
@@ -61,7 +61,10 @@ export default function TableView() {
           <tbody>
             {fetchedData?.map((fetchedDatum) => {
               return (
-                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                <tr
+                  class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+                  key={fetchedDatum.ID}
+                >
                   <th
                     scope="row"
                     class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
@@ -72,20 +75,20 @@ export default function TableView() {
                     {fetchedDatum.province}/{fetchedDatum.club}
                   </td>
                   <td class="py-4 px-6">
-                    {fetchedDatum.Score.east.name}/
-                    {fetchedDatum.Score.east.score}
+                    {fetchedDatum.Score[0].east?.name}/
+                    {fetchedDatum.Score[0].east?.score}
                   </td>
                   <td class="py-4 px-6">
-                    {fetchedDatum.Score.south.name}/
-                    {fetchedDatum.Score.south.score}
+                    {fetchedDatum.Score[0].south?.name}/
+                    {fetchedDatum.Score[0].south?.score}
                   </td>
                   <td class="py-4 px-6">
-                    {fetchedDatum.Score.west.name}/
-                    {fetchedDatum.Score.west.score}
+                    {fetchedDatum.Score[0].west?.name}/
+                    {fetchedDatum.Score[0].west?.score}
                   </td>
                   <td class="py-4 px-6">
-                    {fetchedDatum.Score.north.name}/
-                    {fetchedDatum.Score.north.score}
+                    {fetchedDatum.Score[0].north?.name}/
+                    {fetchedDatum.Score[0].north?.score}
                   </td>
                 </tr>
               );

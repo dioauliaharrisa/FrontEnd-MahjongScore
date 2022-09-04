@@ -43,28 +43,28 @@ export default function HomeView() {
       setTotalScore(newTotalScore);
       return previousScore;
     });
-    console.log(value);
   };
 
-  const submitGameDetails = async () => {
-    await supabase.from("Game_details").insert([
+  const handleSubmit = async () => {
+    const { data } = await supabase.from("Game_Details").insert([
       {
         province: "DKI Jakarta",
         club: "Asosiasi Riichi Mahjong Jakarta Raya",
       },
     ]);
-  };
-  const submitScore = async () => {
-    await supabase
-      .from("Score")
-      .insert([
-        { east: score[0], south: score[1], west: score[2], north: score[3] },
-      ]);
-  };
-
-  const handleSubmit = async () => {
-    submitGameDetails();
-    submitScore();
+    console.log(data[0].ID)
+    // console.log(data.body);
+    // console.log(data.body[0])
+    // console.log(data.body[0].ID);
+    await supabase.from("Score").insert([
+      {
+        east: score[0],
+        south: score[1],
+        west: score[2],
+        north: score[3],
+        Game_Details_ID: data[0].ID,
+      },
+    ]);
   };
 
   return (
