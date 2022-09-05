@@ -35,7 +35,7 @@ export default function TableView() {
     <div className="h-screen bg-[#3d476a] ">
       <TopNavigationBar
         prop_toLeft={"/"}
-        prop_toRight
+        prop_toRight={"/bar-chart"}
         prop_toLeftText={"< Score submission"}
         prop_toRightText={"Chart >"}
       />
