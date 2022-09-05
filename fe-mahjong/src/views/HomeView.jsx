@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import LongInputBar from "../components/LongInputBar";
 import BasicButton from "../components/BasicButton";
+import TopNavigationBar from "../components/TopNavigationBar";
+
 import { Link } from "react-router-dom";
 
 import { createClient } from "@supabase/supabase-js";
@@ -52,7 +54,7 @@ export default function HomeView() {
         club: "Asosiasi Riichi Mahjong Jakarta Raya",
       },
     ]);
-    console.log(data[0].ID)
+    console.log(data[0].ID);
     // console.log(data.body);
     // console.log(data.body[0])
     // console.log(data.body[0].ID);
@@ -68,8 +70,20 @@ export default function HomeView() {
   };
 
   return (
-    <div className="h-screen bg-[#3d476a] grid place-items-center">
-      <div className="w-5/6">
+    <div
+      className="h-screen bg-[#3d476a] 
+    
+    "
+    >
+      {/* */}
+      <TopNavigationBar
+        prop_toLeft={"/login"}
+        prop_toRight={"/table"}
+        prop_toLeftText={"< Logout"}
+        prop_toRightText={"Table >"}
+      />
+      <div className="grid place-items-center ">
+        {/* <div className="w-5/6"> */}
         <div className="flex flex-col m-2 px-4 py-3 bg-[#060628] rounded-md shadow-2xl gap-2">
           <div className="my-1 text-[#b7b7ab] text-left font-mono">East</div>
           <div className="flex flex-row gap-2">
@@ -143,6 +157,7 @@ export default function HomeView() {
             </Link>
           </div>
         </div>
+        {/* </div> */}
       </div>
     </div>
   );

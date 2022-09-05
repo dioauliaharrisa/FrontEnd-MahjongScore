@@ -33,7 +33,12 @@ export default function TableView() {
 
   return (
     <div className="h-screen bg-[#3d476a] ">
-      <TopNavigationBar prop_toLeft={"/"} prop_toRight />
+      <TopNavigationBar
+        prop_toLeft={"/"}
+        prop_toRight
+        prop_toLeftText={"< Score submission"}
+        prop_toRightText={"Chart >"}
+      />
       <div class="overflow-x-auto relative ">
         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
           <thead class="text-xs text-gray-200 uppercase bg-[#3d476a]">
