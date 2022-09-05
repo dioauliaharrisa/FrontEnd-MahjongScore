@@ -54,7 +54,7 @@ export default function HomeView() {
         club: "Asosiasi Riichi Mahjong Jakarta Raya",
       },
     ]);
-    console.log(data[0].ID);
+    // console.log(data[0].ID);
     // console.log(data.body);
     // console.log(data.body[0])
     // console.log(data.body[0].ID);
