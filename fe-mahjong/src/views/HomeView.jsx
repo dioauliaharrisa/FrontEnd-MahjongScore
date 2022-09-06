@@ -1,7 +1,9 @@
+import "react-toastify/dist/ReactToastify.css";
 import React, { useState } from "react";
 import LongInputBar from "../components/LongInputBar";
 import BasicButton from "../components/BasicButton";
 import TopNavigationBar from "../components/TopNavigationBar";
+import { ToastContainer, toast } from "react-toastify";
 
 import { Link } from "react-router-dom";
 
@@ -47,7 +49,33 @@ export default function HomeView() {
     });
   };
 
+  const notify = (section) => {
+    console.log(`entering notify`);
+    toast.error(`All ${section} should be filled.`, {
+      position: "bottom-center",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+  };
+
   const handleSubmit = async () => {
+    for (const scoreItem of score) {
+      console.log(scoreItem);
+      if (!scoreItem.name) {
+        notify("names");
+        return;
+      }
+      if (!scoreItem.score) {
+        notify("scores");
+        return;
+      }
+    }
+
     const { data } = await supabase.from("Game_Details").insert([
       {
         province: "DKI Jakarta",
@@ -82,8 +110,7 @@ export default function HomeView() {
         prop_toLeftText={"< Logout"}
         prop_toRightText={"Table >"}
       />
-      <div className="grid place-items-center ">
-        {/* <div className="w-5/6"> */}
+      <div className="h-full grid content-center ">
         <div className="flex flex-col m-2 px-4 py-3 bg-[#060628] rounded-md shadow-2xl gap-2">
           <div className="my-1 text-[#b7b7ab] text-left font-mono">East</div>
           <div className="flex flex-row gap-2">
@@ -149,15 +176,15 @@ export default function HomeView() {
             <div className="my-1 text-[#b7b7ab] text-left font-mono ">
               Total: {totalScore}
             </div>
-            <Link to={"/table"}>
-              <BasicButton
-                prop_onClick={handleSubmit}
-                prop_buttonName={"Submit"}
-              />
-            </Link>
+            {/* <Link to={"/table"}> */}
+            <BasicButton
+              prop_onClick={handleSubmit}
+              prop_buttonName={"Submit"}
+            ></BasicButton>
+            <ToastContainer limit={2} />
+            {/* </Link> */}
           </div>
         </div>
-        {/* </div> */}
       </div>
     </div>
   );
