@@ -81,19 +81,31 @@ export default function TableView() {
                   </td>
                   <td class="py-4 px-6">
                     {fetchedDatum.Score[0]?.east?.name}/
-                    {fetchedDatum.Score[0]?.east?.score}
+                    {fetchedDatum.Score[0]?.east?.score}/
+                    <div className="font-extrabold">
+                      {fetchedDatum.Score[0]?.east?.points}
+                    </div>
                   </td>
                   <td class="py-4 px-6">
                     {fetchedDatum.Score[0]?.south?.name}/
-                    {fetchedDatum.Score[0]?.south?.score}
+                    {fetchedDatum.Score[0]?.south?.score}/
+                    <div className="font-extrabold">
+                      {fetchedDatum.Score[0]?.south?.points}
+                    </div>
                   </td>
                   <td class="py-4 px-6">
                     {fetchedDatum.Score[0]?.west?.name}/
-                    {fetchedDatum.Score[0]?.west?.score}
+                    {fetchedDatum.Score[0]?.west?.score}/
+                    <div className="font-extrabold">
+                      {fetchedDatum.Score[0]?.west?.points}
+                    </div>
                   </td>
                   <td class="py-4 px-6">
                     {fetchedDatum.Score[0]?.north?.name}/
-                    {fetchedDatum.Score[0]?.north?.score}
+                    {fetchedDatum.Score[0]?.north?.score}/
+                    <div className="font-extrabold">
+                      {fetchedDatum.Score[0]?.north?.points}
+                    </div>
                   </td>
                 </tr>
               );

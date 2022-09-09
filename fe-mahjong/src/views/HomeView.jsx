@@ -15,11 +15,29 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
 export default function HomeView() {
   // eslint-disable-next-line
+  const TARGET_POINT = 30000;
+  const UMA = [15, 5, -5, -15];
   const [score, setScore] = useState([
-    { name: "", score: 0 },
-    { name: "", score: 0 },
-    { name: "", score: 0 },
-    { name: "", score: 0 },
+    {
+      name: "",
+      score: 0,
+      points: 0,
+    },
+    {
+      name: "",
+      score: 0,
+      points: 0,
+    },
+    {
+      name: "",
+      score: 0,
+      points: 0,
+    },
+    {
+      name: "",
+      score: 0,
+      points: 0,
+    },
   ]);
 
   const [totalScore, setTotalScore] = useState(0);
@@ -34,8 +52,13 @@ export default function HomeView() {
       // console.log(previousScore[+index]);
       // console.log(previousScore[+index][placeholder]);
 
-      if (placeholder === "score") previousScore[index][placeholder] = +value;
       if (placeholder === "name") previousScore[index][placeholder] = value;
+      if (placeholder === "score") {
+        previousScore[index][placeholder] = +value;
+        const endScore = (+value - TARGET_POINT) / 1000 + UMA[index];
+        // console.log(endScore);
+        previousScore[index]["points"] = endScore;
+      }
 
       // console.log(previousScore);
       // console.log(totalScore);
@@ -54,7 +77,7 @@ export default function HomeView() {
     toast.error(`All ${section} should be filled.`, {
       position: "bottom-center",
       autoClose: 2000,
-      hideProgressBar: false,
+      hideProgressBar: true,
       closeOnClick: true,
       pauseOnHover: true,
       draggable: true,
@@ -65,7 +88,7 @@ export default function HomeView() {
 
   const handleSubmit = async () => {
     for (const scoreItem of score) {
-      console.log(scoreItem);
+      // console.log(scoreItem);
       if (!scoreItem.name) {
         notify("names");
         return;
@@ -98,11 +121,7 @@ export default function HomeView() {
   };
 
   return (
-    <div
-      className="h-screen bg-[#3d476a] 
-    
-    "
-    >
+    <div className="h-screen bg-[#3d476a]">
       {/* */}
       <TopNavigationBar
         prop_toLeft={"/login"}
@@ -176,13 +195,13 @@ export default function HomeView() {
             <div className="my-1 text-[#b7b7ab] text-left font-mono ">
               Total: {totalScore}
             </div>
-            {/* <Link to={"/table"}> */}
-            <BasicButton
-              prop_onClick={handleSubmit}
-              prop_buttonName={"Submit"}
-            ></BasicButton>
-            <ToastContainer limit={2} />
-            {/* </Link> */}
+            <Link to={"/table"}>
+              <BasicButton
+                prop_onClick={handleSubmit}
+                prop_buttonName={"Submit"}
+              ></BasicButton>
+              <ToastContainer limit={2} />
+            </Link>
           </div>
         </div>
       </div>
