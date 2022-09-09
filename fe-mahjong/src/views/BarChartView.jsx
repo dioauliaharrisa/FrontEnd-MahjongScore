@@ -157,8 +157,8 @@ export default function BarChartView() {
           <Tooltip />
           <Legend />
           <ReferenceLine x={0} stroke="#000" />
-          <Bar dataKey="points" fill="#b7b7ab" label={{ position: "right" }}>
-            <LabelList dataKey="name" position="insideTop" angle="45" />
+          <Bar dataKey="points" fill="#b7b7ab">
+            <LabelList dataKey="name" position="insideLeft" angle="45" />
           </Bar>
         </BarChart>
       </ResponsiveContainer>
