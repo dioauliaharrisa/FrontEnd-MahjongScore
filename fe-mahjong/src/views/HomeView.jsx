@@ -22,21 +22,25 @@ export default function HomeView() {
       name: "",
       score: 0,
       points: 0,
+      award: 0,
     },
     {
       name: "",
       score: 0,
       points: 0,
+      award: 0,
     },
     {
       name: "",
       score: 0,
       points: 0,
+      award: 0,
     },
     {
       name: "",
       score: 0,
       points: 0,
+      award: 0,
     },
   ]);
 
@@ -55,9 +59,8 @@ export default function HomeView() {
       if (placeholder === "name") previousScore[index][placeholder] = value;
       if (placeholder === "score") {
         previousScore[index][placeholder] = +value;
-        const endScore = (+value - TARGET_POINT) / 1000 + UMA[index];
-        // console.log(endScore);
-        previousScore[index]["points"] = endScore;
+        // const endScore = (+value - TARGET_POINT) / 1000
+        // previousScore[index]["points"] = endScore;
       }
 
       // console.log(previousScore);
@@ -86,6 +89,7 @@ export default function HomeView() {
     });
   };
 
+  // validation for input
   const handleSubmit = async () => {
     for (const scoreItem of score) {
       // console.log(scoreItem);
@@ -99,16 +103,35 @@ export default function HomeView() {
       }
     }
 
+    console.log(score);
+    const sortedScore = score.sort((a, b) => {
+      if (a.score > b.score) return -1;
+      if (a.score < b.score) return 1;
+      return 0;
+    });
+    console.log(66, sortedScore);
+    const awardedSortedScore = sortedScore.map((scoreData, index) => {
+      scoreData.award = index;
+      return scoreData;
+    });
+    console.log(67, awardedSortedScore);
+    const withEndPointsAwardedSortedScore = awardedSortedScore.map(
+      (scoreData) => {
+        scoreData.points =
+          (+scoreData.score - TARGET_POINT) / 1000 + UMA[scoreData.award];
+        return scoreData;
+      }
+    );
+    console.log(withEndPointsAwardedSortedScore);
+
+    console.log(68, score);
+
     const { data } = await supabase.from("Game_Details").insert([
       {
         province: "DKI Jakarta",
         club: "Asosiasi Riichi Mahjong Jakarta Raya",
       },
     ]);
-    // console.log(data[0].ID);
-    // console.log(data.body);
-    // console.log(data.body[0])
-    // console.log(data.body[0].ID);
     await supabase.from("Score").insert([
       {
         east: score[0],

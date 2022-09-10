@@ -97,9 +97,14 @@ export default function BarChartView() {
 
       const chartDataContainer = [];
       for (const scoreBearer in scoreDataByNameContainer) {
+        console.log(scoreBearer);
+        console.log(scoreDataByNameContainer);
+        console.log(scoreDataByNameContainer[scoreBearer]);
         chartDataContainer.push({
           name: scoreBearer,
-          points: scoreDataByNameContainer[scoreBearer].reduce((a, b) => a + b),
+          points:
+            scoreDataByNameContainer[scoreBearer].reduce((a, b) => a + b) /
+            scoreDataByNameContainer[scoreBearer].length,
         });
       }
       chartDataContainer.sort(
@@ -162,7 +167,7 @@ export default function BarChartView() {
           <Legend />
           <ReferenceLine x={0} stroke="#000" />
           <Bar dataKey="points" fill="#b7b7ab">
-            <LabelList dataKey="name" position="insideLeft" angle="45" />
+            <LabelList dataKey="name" position="insideLeft" />
           </Bar>
         </BarChart>
       </ResponsiveContainer>

@@ -19,23 +19,23 @@ export default function TableView() {
 
   useEffect(() => {
     const handleFetchAllData = async () => {
-      let { data, error } = await supabase.from("Game_Details").select(`
+      let { data } = await supabase.from("Game_Details").select(`
         "*",
         Score (
           ID, east, south, west, north, Game_Details_ID
         )
       `);
-      console.log(data);
-      console.log(error);
+      // console.log(data);
+      // console.log(error);
 
       setFetchedData(data);
     };
     handleFetchAllData().catch(console.error);
   }, []);
 
-  useEffect(() => {
-    console.log(fetchedData);
-  }, [fetchedData]);
+  // useEffect(() => {
+  //   console.log(fetchedData);
+  // }, [fetchedData]);
 
   return (
     <div className="h-screen bg-[#3d476a] ">
@@ -105,28 +105,44 @@ export default function TableView() {
                     {fetchedDatum.Score[0]?.east?.name}/
                     {fetchedDatum.Score[0]?.east?.score}/
                     <div className="font-extrabold">
-                      {fetchedDatum.Score[0]?.east?.points}
+                      {fetchedDatum.Score[0]?.east?.points > 0
+                        ? `+ ${fetchedDatum.Score[0]?.east?.points.toFixed(1)}`
+                        : `▲ ${Math.abs(
+                            fetchedDatum.Score[0]?.east?.points.toFixed(1)
+                          )}`}
                     </div>
                   </td>
                   <td class="p-1">
                     {fetchedDatum.Score[0]?.south?.name}/
                     {fetchedDatum.Score[0]?.south?.score}/
                     <div className="font-extrabold">
-                      {fetchedDatum.Score[0]?.south?.points}
+                      {fetchedDatum.Score[0]?.south?.points > 0
+                        ? `+ ${fetchedDatum.Score[0]?.south?.points.toFixed(1)}`
+                        : `▲ ${Math.abs(
+                            fetchedDatum.Score[0]?.south?.points.toFixed(1)
+                          )}`}
                     </div>
                   </td>
                   <td class="p-1">
                     {fetchedDatum.Score[0]?.west?.name}/
                     {fetchedDatum.Score[0]?.west?.score}/
                     <div className="font-extrabold">
-                      {fetchedDatum.Score[0]?.west?.points}
+                      {fetchedDatum.Score[0]?.west?.points > 0
+                        ? `+ ${fetchedDatum.Score[0]?.west?.points.toFixed(1)}`
+                        : `▲ ${Math.abs(
+                            fetchedDatum.Score[0]?.west?.points.toFixed(1)
+                          )}`}
                     </div>
                   </td>
                   <td class="p-1">
                     {fetchedDatum.Score[0]?.north?.name}/
                     {fetchedDatum.Score[0]?.north?.score}/
                     <div className="font-extrabold">
-                      {fetchedDatum.Score[0]?.north?.points}
+                      {fetchedDatum.Score[0]?.north?.points > 0
+                        ? `+ ${fetchedDatum.Score[0]?.north?.points.toFixed(1)}`
+                        : `▲ ${Math.abs(
+                            fetchedDatum.Score[0]?.north?.points.toFixed(1)
+                          )}`}
                     </div>
                   </td>
                 </tr>
