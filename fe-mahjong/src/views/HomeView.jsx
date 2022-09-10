@@ -154,7 +154,9 @@ export default function HomeView() {
       />
       <div className="h-full grid content-center ">
         <div className="flex flex-col m-2 px-4 py-3 bg-[#060628] rounded-md shadow-2xl gap-2">
-          <div className="my-1 text-[#b7b7ab] text-left font-mono">East</div>
+          <div className="my-1 text-[#b7b7ab] text-left font-mono">
+            Player 1
+          </div>
           <div className="flex flex-row gap-2">
             <LongInputBar
               prop_placeholderText={"name"}
@@ -169,7 +171,9 @@ export default function HomeView() {
               prop_onChange={handleOnChange}
             />
           </div>
-          <div className="my-1 text-[#b7b7ab] text-left font-mono">South</div>
+          <div className="my-1 text-[#b7b7ab] text-left font-mono">
+            Player 2
+          </div>
           <div className="flex flex-row gap-2">
             <LongInputBar
               prop_placeholderText={"name"}
@@ -184,7 +188,9 @@ export default function HomeView() {
               prop_onChange={handleOnChange}
             />
           </div>
-          <div className="my-1 text-[#b7b7ab] text-left font-mono">West</div>
+          <div className="my-1 text-[#b7b7ab] text-left font-mono">
+            Player 3
+          </div>
           <div className="flex flex-row gap-2">
             <LongInputBar
               prop_placeholderText={"name"}
@@ -199,7 +205,9 @@ export default function HomeView() {
               prop_onChange={handleOnChange}
             />
           </div>
-          <div className="my-1 text-[#b7b7ab] text-left font-mono">North</div>
+          <div className="my-1 text-[#b7b7ab] text-left font-mono">
+            Player 4
+          </div>
           <div className="flex flex-row gap-2">
             <LongInputBar
               prop_placeholderText={"name"}

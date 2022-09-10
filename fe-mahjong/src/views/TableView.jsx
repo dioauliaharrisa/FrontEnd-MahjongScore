@@ -72,16 +72,16 @@ export default function TableView() {
                 Province/Club
               </th>
               <th scope="col" class="p-1  text-xs">
-                East
+                Player 1
               </th>
               <th scope="col" class="p-1  text-xs">
-                South
+                Player 2
               </th>
               <th scope="col" class="p-1  text-xs">
-                West
+                Player 3
               </th>
               <th scope="col" class="p-1  text-xs">
-                North
+                Player 4
               </th>
             </tr>
           </thead>
