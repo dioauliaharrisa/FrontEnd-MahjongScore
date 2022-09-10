@@ -102,6 +102,10 @@ export default function BarChartView() {
           points: scoreDataByNameContainer[scoreBearer].reduce((a, b) => a + b),
         });
       }
+      chartDataContainer.sort(
+        (firstElement, secondElement) =>
+          secondElement.points - firstElement.points
+      );
 
       setFetchedData([temporaryObject]);
       setCurrentSelectedDate(Object.keys(temporaryObject)[0]);
