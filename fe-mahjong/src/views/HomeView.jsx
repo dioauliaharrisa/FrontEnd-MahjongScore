@@ -1,5 +1,5 @@
 import "react-toastify/dist/ReactToastify.css";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import LongInputBar from "../components/LongInputBar";
 import BasicButton from "../components/BasicButton";
 import TopNavigationBar from "../components/TopNavigationBar";
@@ -23,60 +23,60 @@ export default function HomeView() {
       score: 0,
       points: 0,
       award: 0,
+      chombo: 0,
     },
     {
       name: "",
       score: 0,
       points: 0,
       award: 0,
+      chombo: 0,
     },
     {
       name: "",
       score: 0,
       points: 0,
       award: 0,
+      chombo: 0,
     },
     {
       name: "",
       score: 0,
       points: 0,
       award: 0,
+      chombo: 0,
     },
   ]);
 
   const [totalScore, setTotalScore] = useState(0);
 
+  useEffect(() => {
+    console.log(score);
+    console.log(totalScore);
+    // console.log(score[0]);
+    // console.log(score[0]?.chombo);
+  }, [setScore, score, totalScore]);
+
   const handleOnChange = (event, index) => {
     const { value, placeholder } = event.target;
     setScore((previousScore) => {
-      // console.log(value, placeholder, index);
-      // console.log(typeof value);
-      // console.log(placeholder);
-      // console.log(previousScore);
-      // console.log(previousScore[+index]);
-      // console.log(previousScore[+index][placeholder]);
-
-      if (placeholder === "name") previousScore[index][placeholder] = value;
+      const newScore = [...previousScore];
+      if (placeholder === "name") newScore[index][placeholder] = value;
       if (placeholder === "score") {
-        previousScore[index][placeholder] = +value;
-        // const endScore = (+value - TARGET_POINT) / 1000
-        // previousScore[index]["points"] = endScore;
+        newScore[index][placeholder] = +value;
       }
-
-      // console.log(previousScore);
-      // console.log(totalScore);
-      const newTotalScore = previousScore.reduce(
+      console.log(newScore);
+      const newTotalScore = newScore.reduce(
         (previousValue, { score }) => previousValue + score,
         0
       );
-      // console.log(newTotalScore);
       setTotalScore(newTotalScore);
-      return previousScore;
+      return newScore;
     });
   };
 
-  const notify = (section) => {
-    console.log(`entering notify`);
+  const handleError = (section) => {
+    console.log(`entering handleError`);
     toast.error(`All ${section} should be filled.`, {
       position: "bottom-center",
       autoClose: 2000,
@@ -94,11 +94,11 @@ export default function HomeView() {
     for (const scoreItem of score) {
       // console.log(scoreItem);
       if (!scoreItem.name) {
-        notify("names");
+        handleError("names");
         return;
       }
       if (!scoreItem.score) {
-        notify("scores");
+        handleError("scores");
         return;
       }
     }
@@ -119,6 +119,7 @@ export default function HomeView() {
       (scoreData) => {
         scoreData.points =
           (+scoreData.score - TARGET_POINT) / 1000 + UMA[scoreData.award];
+        scoreData.points = scoreData.points - scoreData.chombo * 30;
         return scoreData;
       }
     );
@@ -143,85 +144,69 @@ export default function HomeView() {
     ]);
   };
 
+  const handleAddChombo = (index) => {
+    console.log("entering handleAddChombo");
+    const newScore = [...score];
+    newScore[index].chombo++;
+    setScore(newScore);
+  };
+
+  const handleSetChomboTo0 = (index) => {
+    console.log("entering handleAddChombo");
+    const newScore = [...score];
+    newScore[index].chombo = 0;
+    setScore(newScore);
+  };
   return (
     <div className="h-screen bg-[#3d476a]">
-      {/* */}
       <TopNavigationBar
         prop_toLeft={"/login"}
         prop_toRight={"/table"}
         prop_toLeftText={"< Logout"}
         prop_toRightText={"Table >"}
       />
-      <div className="h-full grid content-center ">
-        <div className="flex flex-col m-2 px-4 py-3 bg-[#060628] rounded-md shadow-2xl gap-2">
-          <div className="my-1 text-[#b7b7ab] text-left font-mono">
-            Player 1
-          </div>
-          <div className="flex flex-row gap-2">
-            <LongInputBar
-              prop_placeholderText={"name"}
-              prop_type={"text"}
-              prop_stateIndex={0}
-              prop_onChange={handleOnChange}
-            />
-            <LongInputBar
-              prop_placeholderText={"score"}
-              prop_type={"number"}
-              prop_stateIndex={0}
-              prop_onChange={handleOnChange}
-            />
-          </div>
-          <div className="my-1 text-[#b7b7ab] text-left font-mono">
-            Player 2
-          </div>
-          <div className="flex flex-row gap-2">
-            <LongInputBar
-              prop_placeholderText={"name"}
-              prop_type={"text"}
-              prop_stateIndex={1}
-              prop_onChange={handleOnChange}
-            />
-            <LongInputBar
-              prop_placeholderText={"score"}
-              prop_type={"number"}
-              prop_stateIndex={1}
-              prop_onChange={handleOnChange}
-            />
-          </div>
-          <div className="my-1 text-[#b7b7ab] text-left font-mono">
-            Player 3
-          </div>
-          <div className="flex flex-row gap-2">
-            <LongInputBar
-              prop_placeholderText={"name"}
-              prop_type={"text"}
-              prop_stateIndex={2}
-              prop_onChange={handleOnChange}
-            />
-            <LongInputBar
-              prop_placeholderText={"score"}
-              prop_type={"number"}
-              prop_stateIndex={2}
-              prop_onChange={handleOnChange}
-            />
-          </div>
-          <div className="my-1 text-[#b7b7ab] text-left font-mono">
-            Player 4
-          </div>
-          <div className="flex flex-row gap-2">
-            <LongInputBar
-              prop_placeholderText={"name"}
-              prop_type={"text"}
-              prop_stateIndex={3}
-              prop_onChange={handleOnChange}
-            />
-            <LongInputBar
-              prop_placeholderText={"score"}
-              prop_type={"number"}
-              prop_stateIndex={3}
-              prop_onChange={handleOnChange}
-            />
-          </div>
+      <div className="grid content-center justify-items-center">
+        <div className="w-max-screen flex flex-col m-2 mt-20 px-4 py-3 bg-[#060628] rounded-md shadow-2xl gap-2">
+          {score &&
+            score.map((scoreDatum, index) => {
+              return (
+                <div key={index}>
+                  <div className="my-1 text-[#b7b7ab] text-left font-mono">
+                    {scoreDatum.chombo
+                      ? `Player ${index + 1} (Chombo ${scoreDatum.chombo})`
+                      : `Player  ${index + 1} `}
+                  </div>
+                  <div className="flex flex-row gap-3">
+                    <LongInputBar
+                      prop_placeholderText={"name"}
+                      prop_type={"text"}
+                      prop_stateIndex={index}
+                      prop_onChange={handleOnChange}
+                    />
+                    <LongInputBar
+                      prop_placeholderText={"score"}
+                      prop_type={"number"}
+                      prop_stateIndex={index}
+                      prop_onChange={handleOnChange}
+                    />
+                    <button
+                      onClick={() => handleAddChombo(index)}
+                      className="px-3 bg-red-400 rounded-sm font-mono text-slate-500"
+                    >
+                      C
+                    </button>
+                    {scoreDatum.chombo && (
+                      <button
+                        onClick={() => handleSetChomboTo0(index)}
+                        className="px-3 bg-red-400 rounded-sm font-mono text-slate-500"
+                      >
+                        X
+                      </button>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
           <div className="flex justify-around items-center gap-2 ">
             <div className="my-1 text-[#b7b7ab] text-left font-mono ">
               Total: {totalScore}

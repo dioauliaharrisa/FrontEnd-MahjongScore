@@ -28,7 +28,8 @@ export default function BasicInputBar({
         placeholder:italic 
         placeholder:text-slate-500
         font-mono
-        w-full h-8 rounded-sm bg-[#b7b7ab]"
+        w-4/12
+         h-8 rounded-sm bg-[#b7b7ab]"
       ></input>
     </>
   );
