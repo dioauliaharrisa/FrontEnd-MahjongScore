@@ -19,15 +19,17 @@ export default function TableView() {
 
   useEffect(() => {
     const handleFetchAllData = async () => {
-      let { data } = await supabase.from("Game_Details").select(`
-        "*",
-        Score (
-          ID, east, south, west, north, Game_Details_ID
+      let { data } = await supabase
+        .from("Game_Details")
+        .select(
+          `
+          "*",
+          Score (
+            ID, east, south, west, north, Game_Details_ID
+          )
+          `
         )
-      `);
-      // console.log(data);
-      // console.log(error);
-
+        .order("created_at", { ascending: false });
       setFetchedData(data);
     };
     handleFetchAllData().catch(console.error);
@@ -45,9 +47,9 @@ export default function TableView() {
         prop_toLeftText={"< Score submission"}
         prop_toRightText={"Chart >"}
       />
-      <div class="relative mt-5">
-        <table class="table-fixed w-full bg-[#b7b7ab] text-xs text-left text-gray-500">
-          <thead class=" text-xs text-gray-200 uppercase bg-[#3d476a]">
+      <div className="relative mt-5">
+        <table className="table-fixed w-full bg-[#b7b7ab] text-xs text-left text-gray-500">
+          <thead className=" text-xs text-gray-200 uppercase bg-[#3d476a]">
             <tr>
               <th
                 scope="col"
@@ -71,16 +73,16 @@ export default function TableView() {
               >
                 Province/Club
               </th>
-              <th scope="col" class="p-1  text-xs">
+              <th scope="col" className="p-1  text-xs">
                 Player 1
               </th>
-              <th scope="col" class="p-1  text-xs">
+              <th scope="col" className="p-1  text-xs">
                 Player 2
               </th>
-              <th scope="col" class="p-1  text-xs">
+              <th scope="col" className="p-1  text-xs">
                 Player 3
               </th>
-              <th scope="col" class="p-1  text-xs">
+              <th scope="col" className="p-1  text-xs">
                 Player 4
               </th>
             </tr>
@@ -89,19 +91,19 @@ export default function TableView() {
             {fetchedData?.map((fetchedDatum, index) => {
               return (
                 <tr
-                  class="bg-white border-black dark:bg-gray-800 dark:border-gray-700"
+                  className="bg-white border-black dark:bg-gray-800 dark:border-gray-700"
                   key={fetchedDatum.ID}
                 >
                   <th
                     scope="row"
-                    class="p-1 font-medium text-gray-900 whitespace-nowrap dark:text-white truncate w-fit"
+                    className="p-1 font-medium text-gray-900 whitespace-nowrap dark:text-white truncate w-fit"
                   >
                     {fetchedDatum.created_at.split("T")[0]}
                   </th>
-                  <td class="p-1 truncate">
+                  <td className="p-1 truncate">
                     {fetchedDatum.province}/{fetchedDatum.club}
                   </td>
-                  <td class="p-1">
+                  <td className="p-1">
                     {fetchedDatum.Score[0]?.east?.name}/
                     {fetchedDatum.Score[0]?.east?.score}/
                     <div className="font-extrabold">
@@ -112,7 +114,7 @@ export default function TableView() {
                           )}`}
                     </div>
                   </td>
-                  <td class="p-1">
+                  <td className="p-1">
                     {fetchedDatum.Score[0]?.south?.name}/
                     {fetchedDatum.Score[0]?.south?.score}/
                     <div className="font-extrabold">
@@ -123,7 +125,7 @@ export default function TableView() {
                           )}`}
                     </div>
                   </td>
-                  <td class="p-1">
+                  <td className="p-1">
                     {fetchedDatum.Score[0]?.west?.name}/
                     {fetchedDatum.Score[0]?.west?.score}/
                     <div className="font-extrabold">
@@ -134,7 +136,7 @@ export default function TableView() {
                           )}`}
                     </div>
                   </td>
-                  <td class="p-1">
+                  <td className="p-1">
                     {fetchedDatum.Score[0]?.north?.name}/
                     {fetchedDatum.Score[0]?.north?.score}/
                     <div className="font-extrabold">
