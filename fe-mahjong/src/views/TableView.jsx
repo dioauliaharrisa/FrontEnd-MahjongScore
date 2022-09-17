@@ -30,6 +30,7 @@ export default function TableView() {
           `
         )
         .order("created_at", { ascending: false });
+      console.log(data);
       setFetchedData(data);
     };
     handleFetchAllData().catch(console.error);
