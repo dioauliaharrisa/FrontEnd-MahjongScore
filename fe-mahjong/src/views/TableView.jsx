@@ -1,15 +1,27 @@
 import React, { useEffect, useState } from "react";
 
-import { createClient } from "@supabase/supabase-js";
-
 import TopNavigationBar from "../components/TopNavigationBar";
-
-const supabaseUrl = process.env.REACT_APP_SUPABASE_URL;
-const supabaseKey = process.env.REACT_APP_SUPABASE_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey);
+import { useMahjongDataStore } from "../store";
 
 export default function TableView() {
-  const [fetchedData, setFetchedData] = useState(null);
+  const obtainWholeData = useMahjongDataStore((state) => state?.fetchWholeData);
+  // const obtainMappedWholeData = useMahjongDataStore(
+  //   (state) => state?.testWholeData
+  // );
+  // const mapDataClassifiedByDate = useMahjongDataStore(
+  //   (state) => state.mapDataClassifiedByDate
+  // );
+
+  useEffect(() => {
+    obtainWholeData();
+    // mapDataClassifiedByDate();
+  }, [obtainWholeData]);
+
+  const wholeData = useMahjongDataStore(({ wholeData }) => wholeData);
+  const mappedWholeData = useMahjongDataStore(
+    ({ testWholeData }) => testWholeData
+  );
+
   const [isThisColumnCollapsed, setIsThisColumnCollapsed] = useState(false);
 
   const collapseThisColumn = () => {
@@ -17,37 +29,23 @@ export default function TableView() {
     setIsThisColumnCollapsed((previousValue) => !previousValue);
   };
 
-  useEffect(() => {
-    const handleFetchAllData = async () => {
-      let { data } = await supabase
-        .from("Game_Details")
-        .select(
-          `
-          "*",
-          Score (
-            ID, east, south, west, north, Game_Details_ID
-          )
-          `
-        )
-        .order("created_at", { ascending: false });
-      console.log(data);
-      setFetchedData(data);
-    };
-    handleFetchAllData().catch(console.error);
-  }, []);
-
+  console.log(wholeData);
+  console.log(666, mappedWholeData, 666);
   // useEffect(() => {
   //   console.log(fetchedData);
   // }, [fetchedData]);
 
   return (
-    <div className="h-screen bg-[#3d476a] ">
+    <div className="h-full bg-[#3d476a] ">
       <TopNavigationBar
         prop_toLeft={"/"}
         prop_toRight={"/bar-chart"}
         prop_toLeftText={"< Score submission"}
         prop_toRightText={"Chart >"}
       />
+      <select value={"all"}>
+        <option value="All">All</option>
+      </select>
       <div className="relative mt-5">
         <table className="table-fixed w-full bg-[#b7b7ab] text-xs text-left text-gray-500">
           <thead className=" text-xs text-gray-200 uppercase bg-[#3d476a]">
@@ -57,8 +55,10 @@ export default function TableView() {
                 onClick={() => collapseThisColumn()}
                 className={
                   isThisColumnCollapsed
-                    ? "p-1 w-2 text-xs truncate"
-                    : "p-1 w-fit text-xs truncate"
+                    ? "p-1 w-2 text-xs "
+                    : // truncate"
+                      "p-1 w-fit text-xs "
+                  // truncate"
                 }
               >
                 Date
@@ -68,8 +68,10 @@ export default function TableView() {
                 onClick={() => collapseThisColumn()}
                 className={
                   isThisColumnCollapsed
-                    ? "p-1 w-2 text-xs truncate"
-                    : "p-1 w-fit text-xs truncate"
+                    ? "p-1 w-2 text-xs "
+                    : // truncate"
+                      "p-1 w-fit text-xs "
+                  // truncate"
                 }
               >
                 Province/Club
@@ -89,7 +91,7 @@ export default function TableView() {
             </tr>
           </thead>
           <tbody>
-            {fetchedData?.map((fetchedDatum, index) => {
+            {wholeData?.map((fetchedDatum, index) => {
               return (
                 <tr
                   className="bg-white border-black dark:bg-gray-800 dark:border-gray-700"

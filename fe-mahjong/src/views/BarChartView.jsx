@@ -54,8 +54,8 @@ export default function BarChartView() {
         temporaryObject[datum.created_at].push(datum.Score[0]);
         // console.log(temporaryObject);
       });
+      // console.log(scoreDataByNameContainer);
       const scoreDataByNameContainer = {};
-      console.log(scoreDataByNameContainer);
       temporaryObject[currentSelectedDate]?.forEach((scoreOnThisDate) => {
         if (!scoreDataByNameContainer[scoreOnThisDate.east.name]) {
           scoreDataByNameContainer[scoreOnThisDate.east.name] = [
