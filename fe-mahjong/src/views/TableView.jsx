@@ -27,11 +27,30 @@ export default function TableView() {
   };
 
   const handleFilterData = (event) => {
-    console.log(event.target.value);
+    // console.log(event.target.value);
     mapDataClassifiedByDate(event.target.value);
   };
   const handleCopyToClipboard = () => {
-    navigator.clipboard.writeText(JSON.stringify(wholeData, null, 2));
+    const _wholeData = wholeData
+      .slice()
+      .map((data) => data.Score)
+      .flat()
+      .map(({ east, south, west, north }) => {
+        return `==========================\r\n${east.name} || ${
+          east.score
+        } || ${east.points.toFixed(1)}\r\n${south.name} || ${
+          south.score
+        } || ${south.points.toFixed(1)}\r\n${west.name} || ${
+          west.score
+        } || ${west.points.toFixed(1)}\r\n${north.name} || ${
+          north.score
+        } || ${north.points.toFixed(1)}\r\n==========================\r\n`;
+      });
+    // .join("%0a");
+
+    console.log(_wholeData);
+
+    navigator.clipboard.writeText(_wholeData);
   };
 
   console.log(wholeData);
