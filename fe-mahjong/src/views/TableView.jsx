@@ -4,33 +4,36 @@ import TopNavigationBar from "../components/TopNavigationBar";
 import { useMahjongDataStore } from "../store";
 
 export default function TableView() {
+  const [isThisColumnCollapsed, setIsThisColumnCollapsed] = useState(false);
   const obtainWholeData = useMahjongDataStore((state) => state?.fetchWholeData);
-  // const obtainMappedWholeData = useMahjongDataStore(
-  //   (state) => state?.testWholeData
-  // );
-  // const mapDataClassifiedByDate = useMahjongDataStore(
-  //   (state) => state.mapDataClassifiedByDate
-  // );
 
   useEffect(() => {
     obtainWholeData();
-    // mapDataClassifiedByDate();
   }, [obtainWholeData]);
 
-  const wholeData = useMahjongDataStore(({ wholeData }) => wholeData);
-  const mappedWholeData = useMahjongDataStore(
-    ({ testWholeData }) => testWholeData
+  const wholeData = useMahjongDataStore(
+    ({ filteredByDateData }) => filteredByDateData
   );
 
-  const [isThisColumnCollapsed, setIsThisColumnCollapsed] = useState(false);
+  const allDates = useMahjongDataStore(({ allDates }) => allDates);
+
+  const mapDataClassifiedByDate = useMahjongDataStore(
+    ({ mapDataClassifiedByDate }) => mapDataClassifiedByDate
+  );
 
   const collapseThisColumn = () => {
     console.log("entering collapseThisColumn");
     setIsThisColumnCollapsed((previousValue) => !previousValue);
   };
 
+  const handleFilterData = (event) => {
+    console.log(event.target.value);
+    mapDataClassifiedByDate(event.target.value);
+  };
+
   console.log(wholeData);
-  console.log(666, mappedWholeData, 666);
+  // console.log(666, mappedWholeData, 666);
+  // console.log(allDates);
   // useEffect(() => {
   //   console.log(fetchedData);
   // }, [fetchedData]);
@@ -43,8 +46,11 @@ export default function TableView() {
         prop_toLeftText={"< Score submission"}
         prop_toRightText={"Chart >"}
       />
-      <select value={"all"}>
+      <select onChange={handleFilterData}>
         <option value="All">All</option>
+        {allDates?.map((datum) => (
+          <option value={datum}>{datum}</option>
+        ))}
       </select>
       <div className="relative mt-5">
         <table className="table-fixed w-full bg-[#b7b7ab] text-xs text-left text-gray-500">

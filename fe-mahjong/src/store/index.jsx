@@ -8,8 +8,7 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 export const useMahjongDataStore = create((set, get) => ({
   wholeData: [],
   allDates: [],
-  testWholeData: [],
-
+  filteredByDateData: [],
   fetchWholeData: async () => {
     const { data } = await supabase
       .from("Game_Details")
@@ -35,24 +34,20 @@ export const useMahjongDataStore = create((set, get) => ({
     });
     console.log();
     set((state) => (state.wholeData = data));
+    set((state) => (state.filteredByDateData = data));
     set((state) => (state.testWholeData = mappedData));
     set((state) => (state.allDates = Object.keys(temporaryObject)));
   },
-  mapDataClassifiedByDate: () => {
+  mapDataClassifiedByDate: (date) => {
+    // console.log(date);
     const _wholeData = get().wholeData;
-    set((state) => ({
-      testWholeData: _wholeData.map((datum) => {
-        console.log(datum);
-        const newDatum = datum;
-        newDatum.created_at = newDatum.created_at.split("T")[0];
-        return newDatum;
-      }),
-    }));
+    if (date === "All") {
+      set((state) => (state.filteredByDateData = _wholeData));
+      return;
+    }
+    const filteredWholeData = _wholeData.filter(
+      (data) => data.created_at === date
+    );
+    set((state) => (state.filteredByDateData = filteredWholeData));
   },
 }));
-
-// testWholeData: state.wholeData.map((datum) => {
-//   const newDatum = datum;
-//   newDatum.created_at = newDatum.created_at.split("T")[0];
-//   return newDatum;
-// });
