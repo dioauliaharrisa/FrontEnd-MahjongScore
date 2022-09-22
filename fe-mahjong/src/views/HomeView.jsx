@@ -7,7 +7,7 @@ import { ToastContainer, toast } from "react-toastify";
 
 import styles from "./homeView.module.css";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { createClient } from "@supabase/supabase-js";
 
@@ -16,6 +16,7 @@ const supabaseKey = process.env.REACT_APP_SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 export default function HomeView() {
+  const navigate = useNavigate();
   // eslint-disable-next-line
   const TARGET_POINT = 30000;
   const UMA = [15, 5, -5, -15];
@@ -78,23 +79,27 @@ export default function HomeView() {
   };
 
   const handleError = (section) => {
-    console.log(`entering handleError`);
-    toast.error(`All ${section} should be filled.`, {
-      position: "bottom-center",
-      autoClose: 2000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "dark",
-    });
+    try {
+      console.log(`entering handleError`);
+      toast.error(`All ${section} should be filled.`, {
+        position: "bottom-center",
+        autoClose: 2000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   // validation for input
   const handleSubmit = async () => {
     for (const scoreItem of score) {
-      // console.log(scoreItem);
+      console.log(scoreItem);
       if (!scoreItem.name) {
         handleError("names");
         return;
@@ -105,18 +110,15 @@ export default function HomeView() {
       }
     }
 
-    console.log(score);
     const sortedScore = score.sort((a, b) => {
       if (a.score > b.score) return -1;
       if (a.score < b.score) return 1;
       return 0;
     });
-    console.log(66, sortedScore);
     const awardedSortedScore = sortedScore.map((scoreData, index) => {
       scoreData.award = index;
       return scoreData;
     });
-    console.log(67, awardedSortedScore);
     const withEndPointsAwardedSortedScore = awardedSortedScore.map(
       (scoreData) => {
         scoreData.points =
@@ -125,9 +127,6 @@ export default function HomeView() {
         return scoreData;
       }
     );
-    console.log(withEndPointsAwardedSortedScore);
-
-    console.log(68, score);
 
     const { data } = await supabase.from("Game_Details").insert([
       {
@@ -144,6 +143,8 @@ export default function HomeView() {
         Game_Details_ID: data[0].ID,
       },
     ]);
+
+    navigate("/table");
   };
 
   const handleAddChombo = (index) => {
@@ -214,13 +215,12 @@ export default function HomeView() {
             <div className="my-1 text-[#b7b7ab] text-left">
               Total: {totalScore}
             </div>
-            <Link to={"/table"}>
-              <BasicButton
-                prop_onClick={handleSubmit}
-                prop_buttonName={"Submit"}
-              ></BasicButton>
-              <ToastContainer limit={2} />
-            </Link>
+            <ToastContainer limit={2} />
+
+            <BasicButton
+              prop_onClick={handleSubmit}
+              prop_buttonName={"Submit"}
+            ></BasicButton>
           </div>
         </div>
       </div>

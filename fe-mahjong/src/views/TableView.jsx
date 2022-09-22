@@ -5,7 +5,6 @@ import TopNavigationBar from "../components/TopNavigationBar";
 import { useMahjongDataStore } from "../store";
 
 export default function TableView() {
-  const [isThisColumnCollapsed, setIsThisColumnCollapsed] = useState(false);
   const obtainWholeData = useMahjongDataStore((state) => state?.fetchWholeData);
 
   useEffect(() => {
@@ -22,13 +21,7 @@ export default function TableView() {
     ({ mapDataClassifiedByDate }) => mapDataClassifiedByDate
   );
 
-  const collapseThisColumn = () => {
-    console.log("entering collapseThisColumn");
-    setIsThisColumnCollapsed((previousValue) => !previousValue);
-  };
-
   const handleFilterData = (event) => {
-    // console.log(event.target.value);
     mapDataClassifiedByDate(event.target.value);
   };
   const handleCopyToClipboard = () => {
@@ -49,10 +42,6 @@ export default function TableView() {
       })
       .join("")
       .concat("==========================\r\n");
-    console.log(_wholeData);
-    // const _wholeDataWithoutComma = _wholeData.split(",").join("");
-
-    // console.log(_wholeDataWithoutComma);
 
     navigator.clipboard.writeText(_wholeData);
   };
