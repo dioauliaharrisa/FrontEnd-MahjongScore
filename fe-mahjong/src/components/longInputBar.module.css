@@ -1,0 +1,32 @@
+:root {
+  --color-mahjong-green: #2f8367;
+  --color-mahjong-beige: #b7b7ab;
+}
+
+.longInputBar {
+  font-size: 0.75rem;
+  line-height: 1rem;
+
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+
+  max-width: 33.33%;
+  min-height: 2rem;
+
+  border-radius: 0.5em;
+
+  background-color: var(--color-mahjong-beige);
+}
+
+::-webkit-input-placeholder {
+  font-style: italic;
+}
+:-moz-placeholder {
+  font-style: italic;
+}
+::-moz-placeholder {
+  font-style: italic;
+}
+:-ms-input-placeholder {
+  font-style: italic;
+}

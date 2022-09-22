@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import styles from "./tableView.module.css";
 
 import TopNavigationBar from "../components/TopNavigationBar";
 import { useMahjongDataStore } from "../store";
@@ -36,19 +37,22 @@ export default function TableView() {
       .map((data) => data.Score)
       .flat()
       .map(({ east, south, west, north }) => {
-        return `==========================\r\n${east.name} || ${
-          east.score
-        } || ${east.points.toFixed(1)}\r\n${south.name} || ${
-          south.score
-        } || ${south.points.toFixed(1)}\r\n${west.name} || ${
-          west.score
-        } || ${west.points.toFixed(1)}\r\n${north.name} || ${
-          north.score
-        } || ${north.points.toFixed(1)}\r\n==========================\r\n`;
-      });
-    // .join("%0a");
-
+        return `==========================\r\n${
+          east.name
+        }${`\x20`.repeat(15 - east.name.length)} || ${east.score} || *${east.points.toFixed(
+          1
+        )}*\r\n${south.name}${`\x20`.repeat(15 - south.name.length)}  || ${south.score} || *${south.points.toFixed(
+          1
+        )}*\r\n${west.name}${`\x20`.repeat(15 - west.name.length)}  || ${west.score} || *${west.points.toFixed(1)}*\r\n${
+          north.name
+        }${`\x20`.repeat(15 - north.name.length)}  || ${north.score} || *${north.points.toFixed(1)}*\r\n`;
+      })
+      .join("")
+      .concat("==========================\r\n");
     console.log(_wholeData);
+    // const _wholeDataWithoutComma = _wholeData.split(",").join("");
+
+    // console.log(_wholeDataWithoutComma);
 
     navigator.clipboard.writeText(_wholeData);
   };
@@ -61,16 +65,16 @@ export default function TableView() {
   // }, [fetchedData]);
 
   return (
-    <div className="h-full bg-[#3d476a] relative">
+    <div className="h-full bg-[#b7b7ab]">
       <TopNavigationBar
         prop_toLeft={"/"}
         prop_toRight={"/bar-chart"}
         prop_toLeftText={"< Score submission"}
         prop_toRightText={"Chart >"}
       />
-      <div className="my-2 flex justify-center">
-        <div>Filter by date:</div>
-        <select className="mx-4" onChange={handleFilterData}>
+      <div className="my-2 flex justify-center relative">
+        <div className={styles.filterText}>Filter by date:</div>
+        <select className={styles.filterDropDown} onChange={handleFilterData}>
           <option value="All">All</option>
           {allDates?.map((datum) => (
             <option value={datum}>{datum}</option>
@@ -79,7 +83,7 @@ export default function TableView() {
         <button
           onClick={handleCopyToClipboard}
           type="button"
-          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          className="fixed bottom-0 right-10 m-10 p-4 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -98,33 +102,17 @@ export default function TableView() {
         </button>
       </div>
       {/* Table */}
-      <div className="">
-        <table className="table-fixed border-collapse border border-slate-500 w-full bg-[#b7b7ab] text-xs text-left text-gray-500">
-          <thead className=" text-xs text-gray-200 uppercase bg-[#3d476a]">
+      <div>
+        <table className="table-fixed border-collapse border border-slate-500 text-xs text-left text-gray-500">
+          <thead className="text-xs text-gray-200 uppercase bg-[#20494b]">
             <tr>
-              <th
-                scope="col"
-                onClick={() => collapseThisColumn()}
-                className={
-                  isThisColumnCollapsed
-                    ? "p-3 w-2 text-xs truncate border-slate-600 "
-                    : "p-3 w-1/5 text-xs truncate border-slate-600 "
-                }
-              >
+              <th scope="col" className={styles.dateTableHead}>
                 Date
               </th>
-              <th
-                scope="col"
-                onClick={() => collapseThisColumn()}
-                className={
-                  isThisColumnCollapsed
-                    ? "p-3 w-2 text-xs truncate border-slate-600 "
-                    : "p-3 w-1/5 break-words text-xs border-slate-600 "
-                }
-              >
-                Province/Club
+              <th scope="col" className={styles.provinceOrClubTableHead}>
+                Province <br></br>/<br></br>Club
               </th>
-              <th scope="col" className="p-3 w-3/5 text-xs">
+              <th scope="col" className={styles.scoresTableHead}>
                 Scores
               </th>
             </tr>
@@ -136,19 +124,19 @@ export default function TableView() {
                   className="bg-white border border-slate-400 dark:bg-gray-800 dark:border-gray-700"
                   key={fetchedDatum.ID}
                 >
-                  <td className="p-1 font-medium text-gray-900 whitespace-nowrap dark:text-white truncate w-fit">
+                  <td className="p-1 font-medium text-gray-900 whitespace-nowrap dark:text-white truncate w-fit text-center">
                     {fetchedDatum.created_at.split("T")[0]}
                   </td>
                   <td className="p-1 break-words">
-                    {fetchedDatum.province}/{fetchedDatum.club}
+                    <strong>{fetchedDatum.province}</strong>/{fetchedDatum.club}
                   </td>
                   <td>
-                    <td className="p-1 flex justify-around">
+                    <td className="p-1 grid grid-cols-3 justify-between">
                       <div> {fetchedDatum.Score[0]?.east?.name}</div>
-                      <div className="justify-self-end">
+                      <div className={styles.scoreTableRow}>
                         {fetchedDatum.Score[0]?.east?.score}
                       </div>
-                      <div className="font-extrabold justify-self-center">
+                      <div className="font-extrabold justify-self-end">
                         {fetchedDatum.Score[0]?.east?.points > 0
                           ? `+${fetchedDatum.Score[0]?.east?.points.toFixed(1)}`
                           : `▲${Math.abs(
@@ -156,14 +144,14 @@ export default function TableView() {
                             )}`}
                       </div>
                     </td>
-                    <td className="p-1 flex justify-around">
+                    <td className="p-1 grid grid-cols-3 justify-between">
                       <div className="">
                         {fetchedDatum.Score[0]?.south?.name}
                       </div>
-                      <div className="">
+                      <div className={styles.scoreTableRow}>
                         {fetchedDatum.Score[0]?.south?.score}
                       </div>
-                      <div className="font-extrabold">
+                      <div className="font-extrabold justify-self-end">
                         {fetchedDatum.Score[0]?.south?.points > 0
                           ? `+${fetchedDatum.Score[0]?.south?.points.toFixed(
                               1
@@ -173,12 +161,12 @@ export default function TableView() {
                             )}`}
                       </div>
                     </td>
-                    <td className="p-1 flex justify-around">
+                    <td className="p-1 grid grid-cols-3 justify-between">
                       <div>{fetchedDatum.Score[0]?.west?.name}</div>
-                      <div className="justify-self-end">
+                      <div className={styles.scoreTableRow}>
                         {fetchedDatum.Score[0]?.west?.score}
                       </div>
-                      <div className="font-extrabold justify-self-center">
+                      <div className="font-extrabold justify-self-end">
                         {fetchedDatum.Score[0]?.west?.points > 0
                           ? `+${fetchedDatum.Score[0]?.west?.points.toFixed(1)}`
                           : `▲${Math.abs(
@@ -186,10 +174,12 @@ export default function TableView() {
                             )}`}
                       </div>
                     </td>
-                    <td className="p-1 flex justify-around">
+                    <td className="p-1 grid grid-cols-3 justify-between">
                       <div>{fetchedDatum.Score[0]?.north?.name}</div>
-                      <div>{fetchedDatum.Score[0]?.north?.score}</div>
-                      <div className="font-extrabold justify-self-center">
+                      <div className={styles.scoreTableRow}>
+                        {fetchedDatum.Score[0]?.north?.score}
+                      </div>
+                      <div className="font-extrabold justify-self-end">
                         {fetchedDatum.Score[0]?.north?.points > 0
                           ? `+${fetchedDatum.Score[0]?.north?.points.toFixed(
                               1

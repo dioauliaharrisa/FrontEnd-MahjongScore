@@ -1,0 +1,47 @@
+.dateTableHead {
+  max-width: 20%;
+  font-size: small;
+  text-align: center;
+
+  border: 1px;
+  border-color: antiquewhite;
+
+  padding: 1em;
+}
+
+.provinceOrClubTableHead {
+  width: 20%;
+  font-size: small;
+  text-align: center;
+
+  border: 1px;
+  border-color: antiquewhite;
+
+  padding: 1em;
+}
+
+.scoresTableHead {
+  max-width: 60%;
+  font-size: small;
+  text-align: center;
+
+  border: 1px;
+  border-color: antiquewhite;
+
+  padding: 1em;
+}
+
+.scoreTableRow {
+  justify-self: start;
+}
+
+.filterText {
+  font-size: small;
+  align-self: center;
+}
+
+.filterDropDown {
+  margin-left: 2rem;
+  padding: .5rem;
+  border-radius: 4px;
+}

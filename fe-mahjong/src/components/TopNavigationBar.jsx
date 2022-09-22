@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Styles from "./TopNavigationBar.module.css";
 
 export default function TopNavigationBar({
   prop_toLeft,
@@ -8,7 +9,7 @@ export default function TopNavigationBar({
   prop_toRightText,
 }) {
   return (
-    <div className="h-10 flex justify-between bg-[#060628]">
+    <div className={Styles.bar}>
       <Link to={prop_toLeft}>
         <div className="p-2 text-[#b7b7ab]">{prop_toLeftText}</div>
       </Link>

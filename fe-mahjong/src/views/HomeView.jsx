@@ -5,6 +5,8 @@ import BasicButton from "../components/BasicButton";
 import TopNavigationBar from "../components/TopNavigationBar";
 import { ToastContainer, toast } from "react-toastify";
 
+import styles from "./homeView.module.css";
+
 import { Link } from "react-router-dom";
 
 import { createClient } from "@supabase/supabase-js";
@@ -158,7 +160,7 @@ export default function HomeView() {
     setScore(newScore);
   };
   return (
-    <div className="h-screen bg-[#3d476a]">
+    <div className={styles.screen}>
       <TopNavigationBar
         prop_toLeft={"/login"}
         prop_toRight={"/table"}
@@ -166,49 +168,50 @@ export default function HomeView() {
         prop_toRightText={"Table >"}
       />
       <div className="grid content-center justify-items-center">
-        <div className="w-max-screen flex flex-col m-2 mt-20 px-4 py-3 bg-[#060628] rounded-md shadow-2xl gap-2">
-          {score &&
-            score.map((scoreDatum, index) => {
-              return (
-                <div key={index}>
-                  <div className="my-1 text-[#b7b7ab] text-left font-mono">
-                    {scoreDatum.chombo
-                      ? `Player ${index + 1} (Chombo ${scoreDatum.chombo})`
-                      : `Player  ${index + 1} `}
-                  </div>
-                  <div className="flex flex-row gap-3">
-                    <LongInputBar
-                      prop_placeholderText={"name"}
-                      prop_type={"text"}
-                      prop_stateIndex={index}
-                      prop_onChange={handleOnChange}
-                    />
-                    <LongInputBar
-                      prop_placeholderText={"score"}
-                      prop_type={"number"}
-                      prop_stateIndex={index}
-                      prop_onChange={handleOnChange}
-                    />
-                    <button
-                      onClick={() => handleAddChombo(index)}
-                      className="px-3 bg-red-400 rounded-sm font-mono text-slate-500"
-                    >
-                      C
-                    </button>
-                    {scoreDatum.chombo && (
-                      <button
-                        onClick={() => handleSetChomboTo0(index)}
-                        className="px-3 bg-red-400 rounded-sm font-mono text-slate-500"
-                      >
-                        X
-                      </button>
-                    )}
-                  </div>
+        <div className="max-w-xs flex flex-col m-4 mt-20 px-4 py-3 bg-[#20494b] rounded-md shadow-3xl  drop-shadow-2xl gap-2">
+          {score?.map((scoreDatum, index) => {
+            return (
+              <div key={index}>
+                <div className="my-1 text-[#b7b7ab] text-left">
+                  {scoreDatum.chombo
+                    ? `Player ${index + 1} (Chombo ${scoreDatum.chombo})`
+                    : `Player  ${index + 1} `}
                 </div>
-              );
-            })}
+                <div className="flex flex-row gap-3">
+                  <LongInputBar
+                    prop_placeholderText={"name"}
+                    prop_type={"text"}
+                    prop_stateIndex={index}
+                    prop_onChange={handleOnChange}
+                  />
+                  <LongInputBar
+                    prop_placeholderText={"score"}
+                    prop_type={"number"}
+                    prop_stateIndex={index}
+                    prop_onChange={handleOnChange}
+                  />
+                  <button
+                    onClick={() => handleAddChombo(index)}
+                    className="px-3 bg-red-400 rounded-lg text-slate-500 flex-none"
+                  >
+                    C
+                  </button>
+                  {scoreDatum.chombo ? (
+                    <button
+                      onClick={() => handleSetChomboTo0(index)}
+                      className="shrink px-3 bg-red-400 rounded-lg text-slate-500 "
+                    >
+                      X
+                    </button>
+                  ) : (
+                    <div className="shrink hidden"></div>
+                  )}
+                </div>
+              </div>
+            );
+          })}
           <div className="flex justify-around items-center gap-2 ">
-            <div className="my-1 text-[#b7b7ab] text-left font-mono ">
+            <div className="my-1 text-[#b7b7ab] text-left">
               Total: {totalScore}
             </div>
             <Link to={"/table"}>

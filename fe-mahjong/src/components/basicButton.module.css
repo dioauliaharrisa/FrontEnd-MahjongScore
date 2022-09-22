@@ -1,0 +1,16 @@
+:root {
+  --color-mahjong-green: #2f8367;
+  --color-mahjong-beige: #b7b7ab;
+  --color-mahjong-darker-green: #20494b;
+}
+
+.basicButton {
+  transition: all 0.3s;
+  border-radius: 0.5em;
+  color: var(--color-mahjong-beige);
+  background-color: var(--color-mahjong-darker-green);
+  box-shadow: 6px 6px 12px #1b3e40, -6px -6px 12px #255456;
+
+  margin: 1em;
+  padding: 0.7em 1.7em;
+}

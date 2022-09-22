@@ -1,0 +1,16 @@
+:root {
+  --color-mahjong-lighter-green: #86c3af;
+  --color-mahjong-green: #2f8367;
+  --color-mahjong-beige: #b7b7ab;
+  --color-mahjong-darker-green: #20494b;
+  --color-mahjong-even-darker-green: #061b1c;
+}
+.bar {
+  display: flex;
+  justify-content: space-between;
+  background-color: var(--color-mahjong-darker-green);
+  color: var(--color-mahjong-darker-green);
+
+  max-height: 2.5rem;
+
+}

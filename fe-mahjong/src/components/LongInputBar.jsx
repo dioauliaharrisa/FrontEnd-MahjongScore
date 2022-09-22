@@ -1,4 +1,5 @@
 import React from "react";
+import styles from "./longInputBar.module.css";
 
 export default function BasicInputBar({
   prop_label,
@@ -12,9 +13,7 @@ export default function BasicInputBar({
   return (
     <>
       {prop_requiredLabel && (
-        <label className="my-1 text-[#b7b7ab] text-left font-mono">
-          {prop_label}
-        </label>
+        <label className="my-1 text-[#b7b7ab] text-left">{prop_label}</label>
       )}
       <input
         onChange={(event) => {
@@ -23,13 +22,9 @@ export default function BasicInputBar({
         type={prop_type}
         name={prop_name}
         placeholder={prop_placeholderText}
-        className="
-        px-2
-        placeholder:italic 
-        placeholder:text-slate-500
-        font-mono
-        w-4/12
-         h-8 rounded-sm bg-[#b7b7ab]"
+        className={styles.longInputBar}
+        // className="
+        // placeholder:text-slate-500
       ></input>
     </>
   );
