@@ -53,12 +53,10 @@ export default function HomeView() {
 
   const [totalScore, setTotalScore] = useState(0);
 
-  useEffect(() => {
-    console.log(score);
-    console.log(totalScore);
-    // console.log(score[0]);
-    // console.log(score[0]?.chombo);
-  }, [setScore, score, totalScore]);
+  // useEffect(() => {
+  //   console.log(score);
+  //   console.log(totalScore);
+  // }, [setScore, score, totalScore]);
 
   const handleOnChange = (event, index) => {
     const { value, placeholder } = event.target;
@@ -68,7 +66,6 @@ export default function HomeView() {
       if (placeholder === "score") {
         newScore[index][placeholder] = +value;
       }
-      console.log(newScore);
       const newTotalScore = newScore.reduce(
         (previousValue, { score }) => previousValue + score,
         0
@@ -146,20 +143,19 @@ export default function HomeView() {
 
     navigate("/table");
   };
-
   const handleAddChombo = (index) => {
     console.log("entering handleAddChombo");
     const newScore = [...score];
     newScore[index].chombo++;
     setScore(newScore);
   };
-
   const handleSetChomboTo0 = (index) => {
     console.log("entering handleAddChombo");
     const newScore = [...score];
     newScore[index].chombo = 0;
     setScore(newScore);
   };
+
   return (
     <div className={styles.screen}>
       <TopNavigationBar
@@ -168,6 +164,7 @@ export default function HomeView() {
         prop_toLeftText={"< Logout"}
         prop_toRightText={"Table >"}
       />
+      <ToastContainer limit={2} />
       <div className="grid content-center justify-items-center">
         <div className="max-w-xs flex flex-col m-4 mt-20 px-4 py-3 bg-[#20494b] rounded-md shadow-3xl  drop-shadow-2xl gap-2">
           {score?.map((scoreDatum, index) => {
@@ -211,16 +208,15 @@ export default function HomeView() {
               </div>
             );
           })}
+
           <div className="flex justify-around items-center gap-2 ">
             <div className="my-1 text-[#b7b7ab] text-left">
               Total: {totalScore}
             </div>
-            <ToastContainer limit={2} />
 
-            <BasicButton
-              prop_onClick={handleSubmit}
-              prop_buttonName={"Submit"}
-            ></BasicButton>
+            <BasicButton prop_onClick={handleSubmit} prop_buttonName={"Submit"}>
+              {" "}
+            </BasicButton>
           </div>
         </div>
       </div>
