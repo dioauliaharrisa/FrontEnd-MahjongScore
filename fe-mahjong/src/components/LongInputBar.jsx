@@ -19,12 +19,11 @@ export default function BasicInputBar({
         onChange={(event) => {
           prop_onChange(event, prop_stateIndex);
         }}
+        
         type={prop_type}
         name={prop_name}
         placeholder={prop_placeholderText}
         className={styles.longInputBar}
-        // className="
-        // placeholder:text-slate-500
       ></input>
     </>
   );

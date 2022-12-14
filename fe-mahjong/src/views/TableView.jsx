@@ -30,15 +30,19 @@ export default function TableView() {
       .map((data) => data.Score)
       .flat()
       .map(({ east, south, west, north }) => {
-        return `==========================\r\n${
-          east.name
-        }${`\x20`.repeat(15 - east.name.length)} || ${east.score} || *${east.points.toFixed(
-          1
-        )}*\r\n${south.name}${`\x20`.repeat(15 - south.name.length)}  || ${south.score} || *${south.points.toFixed(
-          1
-        )}*\r\n${west.name}${`\x20`.repeat(15 - west.name.length)}  || ${west.score} || *${west.points.toFixed(1)}*\r\n${
+        return `==========================\r\n${east.name}${`\x20`.repeat(
+          15 - east.name.length
+        )} || ${east.score} || *${east.points.toFixed(1)}*\r\n${
+          south.name
+        }${`\x20`.repeat(15 - south.name.length)}  || ${
+          south.score
+        } || *${south.points.toFixed(1)}*\r\n${west.name}${`\x20`.repeat(
+          15 - west.name.length
+        )}  || ${west.score} || *${west.points.toFixed(1)}*\r\n${
           north.name
-        }${`\x20`.repeat(15 - north.name.length)}  || ${north.score} || *${north.points.toFixed(1)}*\r\n`;
+        }${`\x20`.repeat(15 - north.name.length)}  || ${
+          north.score
+        } || *${north.points.toFixed(1)}*\r\n`;
       })
       .join("")
       .concat("==========================\r\n");
@@ -104,6 +108,9 @@ export default function TableView() {
               <th scope="col" className={styles.scoresTableHead}>
                 Scores
               </th>
+              <th scope="col" className={styles.infoTableHead}>
+                Info (Tsumo, Ron, Ronned, Chombo)
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -114,9 +121,15 @@ export default function TableView() {
                   key={fetchedDatum.ID}
                 >
                   <td className="p-1 font-medium text-gray-900 whitespace-nowrap dark:text-white truncate w-fit text-center">
-                    {fetchedDatum.created_at.split("T")[0]}
+                    <br />
+                    {fetchedDatum.created_at.split("T")[0].split("-")[0]}
+                    <br />
+                    {fetchedDatum.created_at.split("T")[0].split("-")[1]}
+                    <br />
+                    {fetchedDatum.created_at.split("T")[0].split("-")[2]}
+                    <br />
                   </td>
-                  <td className="p-1 break-words">
+                  <td className="p-1 break-words text-[.5rem]">
                     <strong>{fetchedDatum.province}</strong>/{fetchedDatum.club}
                   </td>
                   <td>
@@ -177,6 +190,32 @@ export default function TableView() {
                               fetchedDatum.Score[0]?.north?.points.toFixed(1)
                             )}`}
                       </div>
+                    </td>
+                  </td>
+                  <td>
+                    <td className="p-1 grid grid-cols-4 place-items-center">
+                      <div> {fetchedDatum.Score[0]?.east?.tsumo}</div>
+                      <div> {fetchedDatum.Score[0]?.east?.ron}</div>
+                      <div> {fetchedDatum.Score[0]?.east?.isRonned}</div>
+                      <div> {fetchedDatum.Score[0]?.east?.chombo}</div>
+                    </td>
+                    <td className="p-1 grid grid-cols-4 place-items-center">
+                      <div> {fetchedDatum.Score[0]?.south?.tsumo}</div>
+                      <div> {fetchedDatum.Score[0]?.south?.ron}</div>
+                      <div> {fetchedDatum.Score[0]?.south?.isRonned}</div>
+                      <div> {fetchedDatum.Score[0]?.south?.chombo}</div>
+                    </td>
+                    <td className="p-1 grid grid-cols-4 place-items-center">
+                      <div> {fetchedDatum.Score[0]?.west?.tsumo}</div>
+                      <div> {fetchedDatum.Score[0]?.west?.ron}</div>
+                      <div> {fetchedDatum.Score[0]?.west?.isRonned}</div>
+                      <div> {fetchedDatum.Score[0]?.west?.chombo}</div>
+                    </td>
+                    <td className="p-1 grid grid-cols-4 place-items-center">
+                      <div> {fetchedDatum.Score[0]?.north?.tsumo}</div>
+                      <div> {fetchedDatum.Score[0]?.north?.ron}</div>
+                      <div> {fetchedDatum.Score[0]?.north?.isRonned}</div>
+                      <div> {fetchedDatum.Score[0]?.north?.chombo}</div>
                     </td>
                   </td>
                 </tr>
