@@ -27,6 +27,9 @@ export default function HomeView() {
       points: 0,
       award: 0,
       chombo: 0,
+      tsumo: 0,
+      ron: 0,
+      isRonned: 0,
     },
     {
       name: "",
@@ -34,6 +37,9 @@ export default function HomeView() {
       points: 0,
       award: 0,
       chombo: 0,
+      tsumo: 0,
+      ron: 0,
+      isRonned: 0,
     },
     {
       name: "",
@@ -41,6 +47,9 @@ export default function HomeView() {
       points: 0,
       award: 0,
       chombo: 0,
+      tsumo: 0,
+      ron: 0,
+      isRonned: 0,
     },
     {
       name: "",
@@ -48,6 +57,9 @@ export default function HomeView() {
       points: 0,
       award: 0,
       chombo: 0,
+      tsumo: 0,
+      ron: 0,
+      isRonned: 0,
     },
   ]);
 
@@ -144,16 +156,50 @@ export default function HomeView() {
     navigate("/table");
   };
   const handleAddChombo = (index) => {
-    console.log("entering handleAddChombo");
     const newScore = [...score];
     newScore[index].chombo++;
     setScore(newScore);
   };
-  const handleSetChomboTo0 = (index) => {
+  const handleAddTsumo = (index) => {
+    const newScore = [...score];
+    newScore[index].tsumo++;
+    setScore(newScore);
+  };
+  const handleAddRon = (index) => {
+    const newScore = [...score];
+    newScore[index].ron++;
+    setScore(newScore);
+  };
+  const handleAddIsRonned = (index) => {
+    const newScore = [...score];
+    newScore[index].isRonned++;
+    setScore(newScore);
+  };
+
+  const handleReset = (index) => {
     console.log("entering handleAddChombo");
     const newScore = [...score];
     newScore[index].chombo = 0;
+    newScore[index].tsumo = 0;
+    newScore[index].ron = 0;
+    newScore[index].isRonned = 0;
     setScore(newScore);
+  };
+  const handleDisplayPlayerAndPlayerInfo = (index, playerInfo) => {
+    let intermediateString = "";
+    let intermediateArray = [];
+    if (index === 0) intermediateString += "東";
+    if (index === 1) intermediateString += "南";
+    if (index === 2) intermediateString += "西";
+    if (index === 3) intermediateString += "北";
+    if (!!playerInfo.chombo)
+      intermediateArray.push(`Chombo: ${playerInfo.chombo}`);
+    if (!!playerInfo.tsumo)
+      intermediateArray.push(`Tsumo: ${playerInfo.tsumo}`);
+    if (!!playerInfo.ron) intermediateArray.push(`Ron: ${playerInfo.ron}`);
+    if (!!playerInfo.isRonned)
+      intermediateArray.push(`Is ronned: ${playerInfo.isRonned}`);
+    return `${intermediateString} ${intermediateArray.join(", ")}`;
   };
 
   return (
@@ -166,44 +212,67 @@ export default function HomeView() {
       />
       <ToastContainer limit={2} />
       <div className="grid content-center justify-items-center">
-        <div className="max-w-xs flex flex-col m-4 mt-20 px-4 py-3 bg-[#20494b] rounded-md shadow-3xl  drop-shadow-2xl gap-2">
+        <div className="max-w-xs flex flex-col my-[3rem] px-4 py-3 bg-[#20494b] rounded-md shadow-3xl drop-shadow-2xl gap-2">
           {score?.map((scoreDatum, index) => {
             return (
               <div key={index}>
                 <div className="my-1 text-[#b7b7ab] text-left">
-                  {scoreDatum.chombo
-                    ? `Player ${index + 1} (Chombo ${scoreDatum.chombo})`
-                    : `Player  ${index + 1} `}
+                  {handleDisplayPlayerAndPlayerInfo(index, scoreDatum)}
                 </div>
-                <div className="flex flex-row gap-3">
-                  <LongInputBar
-                    prop_placeholderText={"name"}
-                    prop_type={"text"}
-                    prop_stateIndex={index}
-                    prop_onChange={handleOnChange}
-                  />
-                  <LongInputBar
-                    prop_placeholderText={"score"}
-                    prop_type={"number"}
-                    prop_stateIndex={index}
-                    prop_onChange={handleOnChange}
-                  />
-                  <button
-                    onClick={() => handleAddChombo(index)}
-                    className="px-3 bg-red-400 rounded-lg text-slate-500 flex-none"
-                  >
-                    C
-                  </button>
-                  {scoreDatum.chombo ? (
+                <div className="flex gap-3">
+                  <div className="flex flex-col justify-center gap-[1rem]">
+                    <LongInputBar
+                      prop_placeholderText={"name"}
+                      prop_type={"text"}
+                      prop_stateIndex={index}
+                      prop_onChange={handleOnChange}
+                    />
+                    <LongInputBar
+                      prop_placeholderText={"score"}
+                      prop_type={"number"}
+                      prop_stateIndex={index}
+                      prop_onChange={handleOnChange}
+                    />
+                  </div>
+                  <div className="p-[1rem] grid grid-cols-2 place-items-center gap-y-[1rem] gap-x-[3rem]">
                     <button
-                      onClick={() => handleSetChomboTo0(index)}
-                      className="shrink px-3 bg-red-400 rounded-lg text-slate-500 "
+                      onClick={() => handleAddTsumo(index)}
+                      className="w-[3rem] bg-red-400 rounded-lg text-slate-500 flex-none r"
                     >
-                      X
+                      T
                     </button>
-                  ) : (
-                    <div className="shrink hidden"></div>
-                  )}
+                    <button
+                      onClick={() => handleAddRon(index)}
+                      className="w-[3rem] bg-red-400 rounded-lg text-slate-500 flex-none"
+                    >
+                      R+
+                    </button>
+                    <button
+                      onClick={() => handleAddIsRonned(index)}
+                      className="w-[3rem] bg-red-400 rounded-lg text-slate-500 flex-none text-center"
+                    >
+                      R-
+                    </button>
+                    <button
+                      onClick={() => handleAddChombo(index)}
+                      className="w-[3rem] bg-red-400 rounded-lg text-slate-500 flex-none"
+                    >
+                      C
+                    </button>
+                  </div>
+                </div>
+                <div className="flex">
+                  {scoreDatum.chombo ||
+                  scoreDatum.tsumo ||
+                  scoreDatum.ron ||
+                  scoreDatum.isRonned ? (
+                    <button
+                      onClick={() => handleReset(index)}
+                      className="shrink p-3 bg-red-400 rounded-lg text-slate-500 w-full "
+                    >
+                      AC
+                    </button>
+                  ) : null}
                 </div>
               </div>
             );
@@ -213,10 +282,10 @@ export default function HomeView() {
             <div className="my-1 text-[#b7b7ab] text-left">
               Total: {totalScore}
             </div>
-
-            <BasicButton prop_onClick={handleSubmit} prop_buttonName={"Submit"}>
-              {" "}
-            </BasicButton>
+            <BasicButton
+              prop_onClick={handleSubmit}
+              prop_buttonName={"Submit"}
+            />
           </div>
         </div>
       </div>
