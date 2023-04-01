@@ -11,6 +11,11 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { createClient } from "@supabase/supabase-js";
 
+//--// MUI //----------------------------------------------------//
+import LoadingButton from "@mui/lab/LoadingButton";
+import SendIcon from "@mui/icons-material/Send";
+//---------------------------------------------------------------//
+
 const supabaseUrl = process.env.REACT_APP_SUPABASE_URL;
 const supabaseKey = process.env.REACT_APP_SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
@@ -90,6 +95,7 @@ export default function HomeView() {
   const handleError = (section) => {
     try {
       console.log(`entering handleError`);
+      setIsSubmittingScore(false);
       toast.error(`All ${section} should be filled.`, {
         position: "bottom-center",
         autoClose: 2000,
@@ -107,6 +113,7 @@ export default function HomeView() {
 
   // validation for input
   const handleSubmit = async () => {
+    setIsSubmittingScore(true);
     for (const scoreItem of score) {
       console.log(scoreItem);
       if (!scoreItem.name) {
@@ -152,7 +159,7 @@ export default function HomeView() {
         Game_Details_ID: data[0].ID,
       },
     ]);
-
+    setIsSubmittingScore(false);
     navigate("/table");
   };
   const handleAddChombo = (index) => {
@@ -201,6 +208,8 @@ export default function HomeView() {
       intermediateArray.push(`Is ronned: ${playerInfo.isRonned}`);
     return `${intermediateString} ${intermediateArray.join(", ")}`;
   };
+
+  const [isSubmittingScore, setIsSubmittingScore] = useState(false);
 
   return (
     <div className={styles.screen}>
@@ -282,10 +291,34 @@ export default function HomeView() {
             <div className="my-1 text-[#b7b7ab] text-left">
               Total: {totalScore}
             </div>
-            <BasicButton
+            {/* <BasicButton
               prop_onClick={handleSubmit}
               prop_buttonName={"Submit"}
-            />
+            /> */}
+            <LoadingButton
+              sx={{
+                color: "#b7b7ab",
+                borderColor: "#b7b7ab",
+                // "&:focus": {
+                //   borderColor: "white",
+                // },
+                ":hover": {
+                  color: "white",
+                  borderColor: "white",
+                },
+                "&.MuiLoadingButton-loading": {
+                  color: "white",
+                  borderColor: "white",
+                },
+              }}
+              onClick={handleSubmit}
+              loading={isSubmittingScore}
+              loadingPosition="start"
+              startIcon={<SendIcon />}
+              variant="outlined"
+            >
+              Submit
+            </LoadingButton>
           </div>
         </div>
       </div>
