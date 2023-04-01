@@ -1,7 +1,6 @@
 import "react-toastify/dist/ReactToastify.css";
 import React, { useState, useEffect } from "react";
 import LongInputBar from "../components/LongInputBar";
-import BasicButton from "../components/BasicButton";
 import TopNavigationBar from "../components/TopNavigationBar";
 import { ToastContainer, toast } from "react-toastify";
 
@@ -291,10 +290,6 @@ export default function HomeView() {
             <div className="my-1 text-[#b7b7ab] text-left">
               Total: {totalScore}
             </div>
-            {/* <BasicButton
-              prop_onClick={handleSubmit}
-              prop_buttonName={"Submit"}
-            /> */}
             <LoadingButton
               sx={{
                 color: "#b7b7ab",
