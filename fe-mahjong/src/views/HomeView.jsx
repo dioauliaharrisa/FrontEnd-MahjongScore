@@ -265,6 +265,7 @@ export default function HomeView() {
                     /> */}
                     <Autocomplete
                       // value={score[index]?.name}
+                      sx={{ "& .MuiInputBase-root": { height: "2.5rem" } }}
                       onChange={async (event, newValue) => {
                         console.log(
                           "🦆 ~ file: HomeView.jsx:268 ~ {score?.map ~ event:",
@@ -368,18 +369,20 @@ export default function HomeView() {
                         );
                         return <li {...props}>{option.name}</li>;
                       }}
-                      freeSolo
+                      size="small"
                       renderInput={(params) => (
                         <TextField
                           {...params}
+                          // InputProps={{
+                          //   ...params.InputProps,
+                          //   style: { height: "2rem" },
+                          // }}
                           sx={{
-                            // width: 300
                             color: "#b7b7ab",
                             backgroundColor: "#b7b7ab",
                             fontSize: "0.75rem",
-                            lineHeight: "1rem",
+                            // lineHeight: "1rem",
                             borderRadius: "0.5em",
-                            minHeight: "2rem",
                           }}
                           // label="Free solo with text demo"
                         />
