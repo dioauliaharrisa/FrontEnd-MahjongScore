@@ -20,6 +20,7 @@
     "recharts": "^2.1.13",
     "typeface-montserrat": "^1.1.13",
     "web-vitals": "^2.1.4",
+    "xlsx": "^0.18.5",
     "zustand": "^4.1.1"
   },
   "scripts": {

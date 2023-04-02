@@ -10,9 +10,14 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { createClient } from "@supabase/supabase-js";
 
+import { useMahjongDataStore } from "../store";
+
 //--// MUI //----------------------------------------------------//
 import LoadingButton from "@mui/lab/LoadingButton";
 import SendIcon from "@mui/icons-material/Send";
+import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
+import TextField from "@mui/material/TextField";
+const filter = createFilterOptions();
 //---------------------------------------------------------------//
 
 const supabaseUrl = process.env.REACT_APP_SUPABASE_URL;
@@ -27,6 +32,7 @@ export default function HomeView() {
   const [score, setScore] = useState([
     {
       name: "",
+      nameId: "",
       score: 0,
       points: 0,
       award: 0,
@@ -37,6 +43,7 @@ export default function HomeView() {
     },
     {
       name: "",
+      nameId: "",
       score: 0,
       points: 0,
       award: 0,
@@ -47,6 +54,7 @@ export default function HomeView() {
     },
     {
       name: "",
+      nameId: "",
       score: 0,
       points: 0,
       award: 0,
@@ -57,6 +65,7 @@ export default function HomeView() {
     },
     {
       name: "",
+      nameId: "",
       score: 0,
       points: 0,
       award: 0,
@@ -73,6 +82,19 @@ export default function HomeView() {
   //   console.log(score);
   //   console.log(totalScore);
   // }, [setScore, score, totalScore]);
+
+  const obtainPlayersData = useMahjongDataStore(
+    (state) => state?.fetchPlayersData
+  );
+  const playersData = useMahjongDataStore(({ playersData }) => playersData);
+  console.log(
+    "🦆 ~ file: HomeView.jsx:85 ~ HomeView ~ playersData:",
+    playersData
+  );
+
+  useEffect(() => {
+    obtainPlayersData();
+  }, [obtainPlayersData, supabase]);
 
   const handleOnChange = (event, index) => {
     const { value, placeholder } = event.target;
@@ -113,6 +135,7 @@ export default function HomeView() {
   // validation for input
   const handleSubmit = async () => {
     setIsSubmittingScore(true);
+    console.log("🦆 ~ file: HomeView.jsx:139 ~ handleSubmit ~ score:", score);
     for (const scoreItem of score) {
       console.log(scoreItem);
       if (!scoreItem.name) {
@@ -149,6 +172,7 @@ export default function HomeView() {
         club: "Asosiasi Riichi Mahjong Jakarta Raya",
       },
     ]);
+
     await supabase.from("Score").insert([
       {
         east: score[0],
@@ -222,6 +246,10 @@ export default function HomeView() {
       <div className="grid content-center justify-items-center">
         <div className="max-w-xs flex flex-col my-[3rem] px-4 py-3 bg-[#20494b] rounded-md shadow-3xl drop-shadow-2xl gap-2">
           {score?.map((scoreDatum, index) => {
+            console.log(
+              "🦆 ~ file: HomeView.jsx:243 ~ {score?.map ~ index:",
+              score[index]
+            );
             return (
               <div key={index}>
                 <div className="my-1 text-[#b7b7ab] text-left">
@@ -229,11 +257,133 @@ export default function HomeView() {
                 </div>
                 <div className="flex gap-3">
                   <div className="flex flex-col justify-center gap-[1rem]">
-                    <LongInputBar
+                    {/* <LongInputBar
                       prop_placeholderText={"name"}
                       prop_type={"text"}
                       prop_stateIndex={index}
                       prop_onChange={handleOnChange}
+                    /> */}
+                    <Autocomplete
+                      // value={score[index]?.name}
+                      onChange={async (event, newValue) => {
+                        console.log(
+                          "🦆 ~ file: HomeView.jsx:268 ~ {score?.map ~ event:",
+                          event
+                        );
+                        console.log(
+                          "🦆 ~ file: HomeView.jsx:268 ~ newValue:",
+                          newValue
+                        );
+
+                        if (typeof newValue === "string") {
+                          setScore((previousScore) => {
+                            const newScore = [...previousScore];
+                            newScore[index]["name"] = newValue;
+                            const newTotalScore = newScore.reduce(
+                              (previousValue, { score }) =>
+                                previousValue + score,
+                              0
+                            );
+                            setTotalScore(newTotalScore);
+                            return newScore;
+                            // title: newValue,
+                          });
+                        } else if (newValue && newValue.inputValue) {
+                          await supabase.from("Players").insert([
+                            {
+                              name: newValue.inputValue,
+                            },
+                          ]);
+                          obtainPlayersData();
+                        } else if (typeof newValue === "object" && newValue) {
+                          console.log(
+                            "🦆 ~ file: HomeView.jsx:302 ~ setScore ~ newValue:",
+                            newValue
+                          );
+                          setScore((previousScore) => {
+                            const newScore = [...previousScore];
+                            newScore[index]["name"] = newValue.name;
+                            newScore[index]["nameId"] = newValue.id;
+                            const newTotalScore = newScore.reduce(
+                              (previousValue, { score }) =>
+                                previousValue + score,
+                              0
+                            );
+                            setTotalScore(newTotalScore);
+                            console.log(
+                              "🦆 ~ file: HomeView.jsx:302 ~ setScore ~ newScore:",
+                              newScore
+                            );
+                            return newScore;
+                          });
+                        }
+                      }}
+                      filterOptions={(options, params) => {
+                        console.log(
+                          "🦆 ~ file: HomeView.jsx:317 ~ options:",
+                          options
+                        );
+                        const filtered = filter(options, params);
+
+                        const { inputValue } = params;
+                        // Suggest the creation of a new value
+                        const isExisting = options.some(
+                          (option) => inputValue === option.title
+                        );
+                        if (inputValue !== "" && !isExisting) {
+                          filtered.push({
+                            inputValue,
+                            name: `Add "${inputValue}"`,
+                          });
+                        }
+
+                        return filtered;
+                      }}
+                      selectOnFocus
+                      clearOnBlur
+                      handleHomeEndKeys
+                      freeSolo
+                      id="free-solo-with-text-demo"
+                      options={playersData}
+                      getOptionLabel={(option) => {
+                        console.log(
+                          "🦆 ~ file: HomeView.jsx:313 ~ option:",
+                          option
+                        );
+                        // Value selected with enter, right from the input
+                        // if (typeof option === "string") {
+                        //   return option;
+                        // }
+                        // Add "xxx" option created dynamically
+                        if (option.inputValue) {
+                          return option.inputValue;
+                        }
+                        // Regular option
+                        return option.name || "";
+                      }}
+                      renderOption={(props, option) => {
+                        console.log(
+                          "🦆 ~ file: HomeView.jsx:329 ~ option:",
+                          option
+                        );
+                        return <li {...props}>{option.name}</li>;
+                      }}
+                      freeSolo
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          sx={{
+                            // width: 300
+                            color: "#b7b7ab",
+                            backgroundColor: "#b7b7ab",
+                            fontSize: "0.75rem",
+                            lineHeight: "1rem",
+                            borderRadius: "0.5em",
+                            minHeight: "2rem",
+                          }}
+                          // label="Free solo with text demo"
+                        />
+                      )}
                     />
                     <LongInputBar
                       prop_placeholderText={"score"}
