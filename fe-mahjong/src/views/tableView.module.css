@@ -56,7 +56,9 @@
 }
 
 .filterDropDown {
-  margin-left: 2rem;
+  /* margin-left: 2rem; */
+  margin: auto;
+  max-width: 80%;
   padding: 0.5rem;
   border-radius: 4px;
 }
