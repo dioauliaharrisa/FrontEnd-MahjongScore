@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import styles from "./tableView.module.css";
 import {
   ResponsiveContainer,
   BarChart,
@@ -13,6 +14,7 @@ import {
   LabelList,
 } from "recharts";
 import TopNavigationBar from "../components/TopNavigationBar";
+import { useMahjongDataStore } from "../store";
 
 import { createClient } from "@supabase/supabase-js";
 const supabaseUrl = process.env.REACT_APP_SUPABASE_URL;
@@ -38,24 +40,41 @@ export default function BarChartView() {
       `);
       // console.log(data);
       console.log(error);
+
       const mappedDateData = data.map((datum) => {
         const newDatum = datum;
         // console.log(55, typeof newDatum.created_at.split("T")[0]);
 
         newDatum.created_at = newDatum.created_at.split("T")[0];
+
         return newDatum;
       });
+      const filteredData = mappedDateData.filter(
+        (datum) => datum.created_at === currentSelectedDate
+      );
+      console.log(
+        "🦆 ~ file: BarChartView.jsx:55 ~ handleFetchAllData ~ filteredData:",
+        filteredData
+      );
+      console.log(
+        "🦆 ~ file: BarChartView.jsx:50 ~ mappedDateData ~ mappedDateData:",
+        mappedDateData
+      );
       let temporaryObject = {};
-      mappedDateData.forEach((datum) => {
+      filteredData.forEach((datum) => {
         // console.log(datum);
         // console.log(datum.created_at);
         if (!temporaryObject[datum.created_at])
           temporaryObject[datum.created_at] = [];
         temporaryObject[datum.created_at].push(datum.Score[0]);
-        // console.log(temporaryObject);
       });
+      console.log(
+        "🦆 ~ file: BarChartView.jsx:51 ~ handleFetchAllData ~ temporaryObject:",
+        temporaryObject
+      );
       // console.log(scoreDataByNameContainer);
       const scoreDataByNameContainer = {};
+
       temporaryObject[currentSelectedDate]?.forEach((scoreOnThisDate) => {
         if (!scoreDataByNameContainer[scoreOnThisDate.east.name]) {
           scoreDataByNameContainer[scoreOnThisDate.east.name] = [
@@ -94,6 +113,10 @@ export default function BarChartView() {
           );
         }
       });
+      console.log(
+        "🦆 ~ file: BarChartView.jsx:68 ~ handleFetchAllData ~ scoreDataByNameContainer:",
+        scoreDataByNameContainer
+      );
 
       const chartDataContainer = [];
       for (const scoreBearer in scoreDataByNameContainer) {
@@ -123,10 +146,10 @@ export default function BarChartView() {
 
   useEffect(() => {
     // console.log(fetchedData);
-    // console.log(currentSelectedDate);
+    // console.log(currentSelectedDate, 88);
     // console.log(filteredFetchedData);
     // console.log(filteredByNameFetchedData);
-    console.log(chartData);
+    // console.log(chartData);
   }, [
     fetchedData,
     currentSelectedDate,
@@ -134,6 +157,21 @@ export default function BarChartView() {
     filteredByNameFetchedData,
     chartData,
   ]);
+
+  const mapDataClassifiedByDate = useMahjongDataStore(
+    ({ mapDataClassifiedByDate }) => mapDataClassifiedByDate
+  );
+  const allDates = useMahjongDataStore(({ allDates }) => allDates);
+
+  const handleFilterData = (event, filter) => {
+    console.log(
+      "🦆 ~ file: TableView.jsx:34 ~ handleFilterData ~ event:",
+      66,
+      event.target.value,
+      filter
+    );
+    if (filter === "date") mapDataClassifiedByDate(event.target.value);
+  };
 
   return (
     <div className="h-screen bg-[#3d476a]">
@@ -144,6 +182,16 @@ export default function BarChartView() {
         prop_toRightText={"Radar >"}
       />
       <div className="mt-4 text-2xl">{currentSelectedDate}</div>
+      <div className={styles.filterText}>Filter by date:</div>
+      <select
+        className={styles.filterDropDown}
+        onChange={(event) => setCurrentSelectedDate(event.target.value)}
+      >
+        <option value="All">All</option>
+        {allDates?.map((datum) => (
+          <option value={datum}>{datum}</option>
+        ))}
+      </select>
       <ResponsiveContainer width="90%" height="80%">
         <BarChart
           data={chartData}
