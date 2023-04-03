@@ -69,6 +69,21 @@ export default function TableView() {
   };
 
   const handleDownloadExcel = () => {
+    const findRespectiveUma = (award) => {
+      switch (award) {
+        case 0:
+          return 15;
+        case 1:
+          return 5;
+        case 2:
+          return -5;
+        case 3:
+          return -15;
+        default:
+          break;
+      }
+    };
+
     const _wholeData = wholeData.slice();
     console.log(
       "🦆 ~ file: TableView.jsx:73 ~ handleDownloadExcel ~ _wholeData:",
@@ -78,22 +93,30 @@ export default function TableView() {
     const header = [];
     const column = {
       date: "Date",
+      //-----------------//
       東rank: "東 Rank",
       東name: "東 Name",
       東score: "東 Score",
-      東points: "東 Points",
+      東rawPoints: "東 Points",
+      東uma: "東 Uma",
+      //-----------------//
       南rank: "南 Rank",
       南name: "南 Name",
       南score: "南 Score",
-      南points: "南 Points",
+      南rawPoints: "南 Points",
+      南uma: "南 Uma",
+      //-----------------//
       西rank: "西 Rank",
       西name: "西 Name",
       西score: "西 Score",
-      西points: "西 Points",
+      西rawPoints: "西 Points",
+      西uma: "西 Uma",
+      //-----------------//
       北rank: "北 Rank",
       北name: "北 Name",
       北score: "北 Score",
-      北points: "北 Points",
+      北rawPoints: "北 Points",
+      北uma: "北 Uma",
     };
     for (const key in column) {
       header.push(column[key]);
@@ -102,22 +125,38 @@ export default function TableView() {
     const data = _wholeData.map((datum) => {
       return {
         [column.date]: datum.created_at,
+        //-----------------//
         [column.東rank]: datum.Score[0].east.award + 1,
         [column.東name]: datum.Score[0].east.name,
         [column.東score]: datum.Score[0].east.score,
-        [column.東points]: datum.Score[0].east.points,
+        [column.東rawPoints]:
+          datum.Score[0].east.points -
+          findRespectiveUma(datum.Score[0].east.award),
+        [column.東uma]: `+${findRespectiveUma(datum.Score[0].east.award)}`,
+        //-----------------//
         [column.南rank]: datum.Score[0].south.award + 1,
         [column.南name]: datum.Score[0].south.name,
-        [column.南score]: datum.Score[0].south.name,
-        [column.南points]: datum.Score[0].south.points,
+        [column.南score]: datum.Score[0].south.score,
+        [column.南rawPoints]:
+          datum.Score[0].south.points -
+          findRespectiveUma(datum.Score[0].south.award),
+        [column.南uma]: `+${findRespectiveUma(datum.Score[0].south.award)}`,
+        //-----------------//
         [column.西rank]: datum.Score[0].west.award + 1,
         [column.西name]: datum.Score[0].west.name,
-        [column.西score]: datum.Score[0].west.name,
-        [column.西points]: datum.Score[0].west.points,
+        [column.西score]: datum.Score[0].west.score,
+        [column.西rawPoints]:
+          datum.Score[0].west.points -
+          findRespectiveUma(datum.Score[0].west.award),
+        [column.西uma]: `+${findRespectiveUma(datum.Score[0].west.award)}`,
+        //-----------------//
         [column.北rank]: datum.Score[0].north.award + 1,
         [column.北name]: datum.Score[0].north.name,
-        [column.北score]: datum.Score[0].north.name,
-        [column.北points]: datum.Score[0].north.points,
+        [column.北score]: datum.Score[0].north.score,
+        [column.北rawPoints]:
+          datum.Score[0].north.points -
+          findRespectiveUma(datum.Score[0].north.award),
+        [column.北uma]: `+${findRespectiveUma(datum.Score[0].north.award)}`,
       };
     });
 
