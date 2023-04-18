@@ -10,6 +10,7 @@ export const useMahjongDataStore = create((set, get) => ({
   allDates: [],
   filteredByDateData: [],
   playersData: [],
+  graphVersusPointsData: [],
   fetchWholeData: async () => {
     const { data } = await supabase
       .from("Game_Details")
@@ -75,5 +76,54 @@ export const useMahjongDataStore = create((set, get) => ({
       );
     });
     set((state) => (state.filteredByDateData = filteredWholeData));
+  },
+  createGraphVersusPointsData: (filteredPlayerId) => {
+    // console.log(
+    //   "🦆 ~ file: index.jsx:84 ~ useMahjongDataStore ~ filteredPlayerId:",
+    //   filteredPlayerId
+    // );
+    const temporaryObject = {};
+    get().filteredByDateData.forEach(({ Score }) => {
+      for (const key in Score[0]) {
+        let baseFilteredPlayerScore = 0;
+
+        for (const key in Score[0]) {
+          if (Score[0][key].nameId === filteredPlayerId)
+            baseFilteredPlayerScore = Score[0][key].points;
+        }
+        // console.log("🦆 ~ file: index.jsx:87 ~ get ~ key:", Score[0]);
+        if (!Score[0][key].nameId) continue;
+        if (Score[0][key].nameId !== filteredPlayerId) {
+          console.log(
+            "🦆 ~ file: index.jsx:108 ~ get ~ temporaryObject[Score[0][key].name]:",
+            temporaryObject[Score[0][key].name]
+          );
+          if (!temporaryObject[Score[0][key].name])
+            temporaryObject[Score[0][key].name] = 0;
+          temporaryObject[Score[0][key].name] +=
+            +(Score[0][key].points + baseFilteredPlayerScore).toFixed(1) || 0;
+        }
+      }
+    });
+
+    console.log(
+      "🦆 ~ file: index.jsx:119 ~ useMahjongDataStore ~ temporaryObject:",
+      temporaryObject
+    );
+
+    const temporaryArray = [];
+    for (const key in temporaryObject) {
+      const tempObj = {
+        subject: key,
+        A: temporaryObject[key].toFixed(1),
+        fullMark: 200,
+      };
+      temporaryArray.push(tempObj);
+    }
+    console.log(
+      "🦆 ~ file: index.jsx:117 ~ useMahjongDataStore ~ temporaryArray:",
+      temporaryArray
+    );
+    set((state) => (state.graphVersusPointsData = temporaryArray));
   },
 }));

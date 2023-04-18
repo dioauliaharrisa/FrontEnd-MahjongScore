@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./tableView.module.css";
 
 import * as XLSX from "xlsx/xlsx.mjs";

@@ -1,4 +1,5 @@
-import React from "react";
+import { useEffect, useState } from "react";
+import styles from "./tableView.module.css";
 import {
   RadarChart,
   PolarGrid,
@@ -9,46 +10,53 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import TopNavigationBar from "../components/TopNavigationBar";
+import { useMahjongDataStore } from "../store";
 
 export default function RadarView() {
-  const data = [
-    {
-      subject: "Aggresiveness",
-      A: 120,
-      B: 110,
-      fullMark: 150,
-    },
-    {
-      subject: "Luck",
-      A: 98,
-      B: 130,
-      fullMark: 150,
-    },
-    {
-      subject: "Riichi",
-      A: 86,
-      B: 130,
-      fullMark: 150,
-    },
-    {
-      subject: "Defensiveness",
-      A: 99,
-      B: 100,
-      fullMark: 150,
-    },
-    {
-      subject: "X",
-      A: 85,
-      B: 90,
-      fullMark: 150,
-    },
-    {
-      subject: "Dama",
-      A: 65,
-      B: 85,
-      fullMark: 150,
-    },
-  ];
+  const obtainWholeData = useMahjongDataStore((state) => state?.fetchWholeData);
+  const fetchPlayersData = useMahjongDataStore(
+    (state) => state?.fetchPlayersData
+  );
+  const filteredByDateData = useMahjongDataStore(
+    (state) => state?.filteredByDateData
+  );
+  const graphVersusPointsData = useMahjongDataStore(
+    (state) => state?.graphVersusPointsData
+  );
+  console.log(
+    "🦆 ~ file: RadarView.jsx:23 ~ RadarView ~ filteredByDateData:",
+    filteredByDateData
+  );
+
+  useEffect(() => {
+    obtainWholeData();
+    fetchPlayersData();
+  }, [obtainWholeData, fetchPlayersData]);
+
+  const allPlayers = useMahjongDataStore(({ playersData }) => playersData);
+
+  const mapDataClassifiedByDate = useMahjongDataStore(
+    ({ mapDataClassifiedByDate }) => mapDataClassifiedByDate
+  );
+  const mapDataClassifiedByPlayerName = useMahjongDataStore(
+    ({ mapDataClassifiedByPlayerName }) => mapDataClassifiedByPlayerName
+  );
+  const createGraphVersusPointsData = useMahjongDataStore(
+    ({ createGraphVersusPointsData }) => createGraphVersusPointsData
+  );
+
+  const handleFilterData = (event, filter) => {
+    console.log(
+      "🦆 ~ file: TableView.jsx:34 ~ handleFilterData ~ event:",
+      66,
+      event.target.value,
+      filter
+    );
+    if (filter === "playerName")
+      mapDataClassifiedByPlayerName(event.target.value);
+    createGraphVersusPointsData(event.target.value);
+  };
+
   return (
     <div className="h-screen bg-[#3d476a]">
       <TopNavigationBar
@@ -57,15 +65,29 @@ export default function RadarView() {
         prop_toLeftText={"< Table"}
         prop_toRightText
       />
-      <ResponsiveContainer width={"100%"} height="80%">
-        <RadarChart outerRadius={90} width={730} height={250} data={data}>
+      <div className={styles.filterText}>Filter by player:</div>
+      <select
+        className={styles.filterDropDown}
+        onChange={(event) => handleFilterData(event, "playerName")}
+      >
+        <option value="All">All</option>
+        {allPlayers?.map((datum) => (
+          <option value={datum.id}>{datum.name}</option>
+        ))}
+      </select>
+      <ResponsiveContainer width={"100%"} height="60%">
+        <RadarChart
+          outerRadius={180}
+          width={900}
+          height={500}
+          data={graphVersusPointsData}
+        >
           <PolarGrid />
           <PolarAngleAxis dataKey="subject" />
-          <PolarRadiusAxis angle={30} domain={[0, 150]} />
+          <PolarRadiusAxis angle={30} domain={[-200, 200]} />
           <Radar
-            name="Mike"
             dataKey="A"
-            stroke="#8884d8"
+            stroke="red"
             fill="#8884d8"
             fillOpacity={0.6}
           />
